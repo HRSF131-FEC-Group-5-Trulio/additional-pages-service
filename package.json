@@ -7,7 +7,7 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --watch",
     "start": "webpack-dev-server --watch",
     "serve": "node server/index.js"
   },
@@ -15,6 +15,7 @@
     "@babel/core": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
+    "axios": "^0.21.0",
     "babel-loader": "^8.0.6",
     "express": "^4.17.1",
     "mongoose": "^5.10.13",
@@ -26,6 +27,7 @@
     "webpack-dev-server": "^3.9.0"
   },
   "devDependencies": {
+    "css-loader": "^5.0.1",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor.git"
   },
   "version": "1.0.0",

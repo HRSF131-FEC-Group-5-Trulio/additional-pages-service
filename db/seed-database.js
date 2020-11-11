@@ -1,3 +1,4 @@
+const getData = require('./getData.js')
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/realestate', {useNewUrlParser: true}).catch((err) => {
   if(err) {
@@ -7,7 +8,6 @@ mongoose.connect('mongodb://localhost/realestate', {useNewUrlParser: true}).catc
 
 const imageSchema = new mongoose.Schema({
   id: Number,
-  ImageUrl: String,
   Address: String,
   Beds: Number,
   Baths: Number,
@@ -23,7 +23,6 @@ var save = function(data) {
   //create an options object to shape our data
   var options = {
     id: 1,
-    ImageUrl: 'https://',
     Address: 'Abbey Lane',
     Beds: 2,
     Baths: 2,
@@ -41,4 +40,5 @@ var save = function(data) {
   });
 }
 
-save();
+//save();
+//getData.getData();
