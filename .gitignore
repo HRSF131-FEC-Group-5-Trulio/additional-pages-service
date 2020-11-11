@@ -25,5 +25,5 @@ build/
 dist/
 
 #API Key
-./db.config.js
+db/config.js
 
