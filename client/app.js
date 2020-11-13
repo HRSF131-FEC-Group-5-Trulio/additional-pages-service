@@ -1,16 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import styles from 'client/styles.css';
+import $ from 'jquery';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state= {
+      properties: [],
+    };
+  }
+
+  componentDidMount() {
+    //ajax call to the server to get stuff from the database.
+    $.ajax({
+      url: 'http://localhost:3000/property',
+      method: 'GET',
+      success: (data) => {
+        console.log('ajax request succesful!' + data);
+        var parsed = JSON.parse(data);
+        this.setState({properties: parsed});
+        //console.log(data[0].imageURL)
+      },
+      error: (err) => {
+        console.log('ajax request error' + err);
+      }
+    })
+  }
     render() {
         return (
           <div className="contentSlider">
             <div className="flexContainer">
-              {new Array(5).fill(0).map((image, index) => (
+              {this.state.properties.length > 0 ? this.state.properties.map((image, index) => (
               <div className="cellBox">
                 <div className="imageDiv">
-                  <img src={`https://loremflickr.com/320/240?random=${index}`}/>
+                  <img src={image.imageURL}/>
                 </div>
                 <div className="descriptionBox">
                   <div className="price">$2,245,000</div>
@@ -21,7 +44,7 @@ class App extends React.Component {
               </div>
                 )
 
-              )}
+              ) : 'empty'}
             </div>
           </div>
         )

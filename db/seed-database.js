@@ -6,55 +6,9 @@ mongoose.connect('mongodb://localhost/realestate', {useNewUrlParser: true}).catc
     console.log('error connecting! ', err);
   }
 });
+// NEED TO WRITE TESTS.
+// NEED TO WRITE GET REQUESTS
 
-// const fs = require('fs');
-// const faker = require('faker');
-
-
-// //Seeding is just a complicated for loop
-// //Lets look at approach one seeding to a file iteration
-// const images = ['https://s3-us-west-1.amazonaws.com/demo.fec.hackreactor/CSS.jpeg', 'https://secondimage.jpeg']
-// const prices = [10, 20, 30];
-// //Faker test
-// // let avatar = faker.image.avatar();
-// // console.log(avatar)
-
-
-// function createRecord(images, prices, id) {
-//   let dataStr = '';
-//   dataStr += `${id}`;
-//   dataStr += ` ${Math.floor(Math.random() * 10)}`
-//   dataStr += ` ${images[id % 2]}`;
-//   dataStr += ` ${prices[id % 3]}`;
-//   dataStr += ` ${faker.image.avatar()}`
-//   dataStr += `\n`;
-
-//   return dataStr;
-// }
-
-// function seedData(entries) {
-//   let created = 1;
-//   let fileText = '';
-//   while (created <= entries) {
-//     fileText += createRecord(images, prices, created);
-//     created++;
-//   }
-
-//   return new Promise((resolve, reject) => {
-//     fs.writeFile('data.txt', fileText, (err, data) => {
-//       if (err) {
-//         reject(err)
-//       } else {
-//         resolve(data)
-//       }
-//     })
-//   })
-
-// }
-
-// seedData(10)
-//   .then(() => { console.log("Wasn't that easy") })
-//   .catch(() => { console.log("Misdirect the student's quickly") })
 // need to know neighborhood of primary record
 //will need a property schema
 //property schema needs to be linked to the neighborhood
@@ -94,6 +48,7 @@ function createRecord(id) {
 
   let dataObj = {
     id: id,
+    // need to figue out how to turn these into id numbers?
     relatedProperties: [1,2,3,4,5], // an array of id numbers. When query, try to find ID numbers. Find all documents that have ID numbers in this array.
     price: 1000000 + Math.floor(Math.random() * 5000000),
     streetAddress: faker.address.streetAddress(),
@@ -103,7 +58,7 @@ function createRecord(id) {
     Beds: 2 + Math.floor(Math.random() * 3),
     Baths: 2 + Math.floor(Math.random() * 1),
     Sqft: 4000 + Math.floor(Math.random() * 2000),
-    imageURL: faker.image.city(),
+    imageURL: 'https://s3-us-west-1.amazonaws.com/fec.hr/0af3ffab025f9a8a151bc4e66183d7ff-full.webp',
     favorites: false
   };
 
@@ -129,6 +84,13 @@ var save = function(entries) {
   // for each of our data, .save into our database.
 
 }
+var fetch = function(callback) {
+  Property.find(null, {id: 1, imageURL: 1}).limit(10).exec(callback);
+}
 
 save(10);
 //getData.getData();
+module.exports = {
+  save,
+  fetch
+}
