@@ -29,6 +29,7 @@ class App extends React.Component {
     render() {
         return (
           <div className="contentSlider">
+            <h3>Similar Homes You May Like</h3>
             <div className="flexContainer">
               {this.state.properties.length > 0 ? this.state.properties.map((image, index) => (
               <div className="cellBox">
