@@ -1,10 +1,16 @@
 const getData = require('./getData.js')
 const mongoose = require('mongoose');
+const faker = require('faker');
 mongoose.connect('mongodb://localhost/realestate', {useNewUrlParser: true}).catch((err) => {
   if(err) {
     console.log('error connecting! ', err);
   }
 });
+
+// NEED TO WRITE TESTS.
+// NEED TO WRITE GET REQUESTS
+
+
 // need to know neighborhood of primary record
 //will need a property schema
 //property schema needs to be linked to the neighborhood
@@ -12,49 +18,85 @@ mongoose.connect('mongodb://localhost/realestate', {useNewUrlParser: true}).catc
 // sometimes there is a listing agent ID.
 // image portion looks good, need to tie it to neighborhood (faker has city pictures)
 
+//property schema will just contain ID numbers. Subsequent query find the documents with those ID numbers. Do two queries to mongo. Find property, get property, have object. find all documents that hve id numbers.
+// will need 100 entries. Pull id numbers from related properties
+
+// incorporate favorites.
+
 const propertySchema = new mongoose.Schema({
   id: Number,
-  neighborhood: String,
-  relatedProperties: [{type: Schema.Types.ObjectId, ref: 'Property'}],
-  listingAgentID: String
-
-})
-
-const imageSchema = new mongoose.Schema({
-  id: Number,
-  imageURL: String,
-  Address: String,
+  relatedProperties: [Number], // an array of id numbers. When query, try to find ID numbers. Find all documents that have ID numbers in this array.
+  price: Number,
+  streetAddress: String,
+    city: String,
+    state: String,
+    zipCode: String,
   Beds: Number,
   Baths: Number,
   Sqft: Number,
-  propertyId: {type: Schema.Types.ObjectId, ref: 'Property' }
-});
+  imageURL: String,
+  favorites: Boolean
+})
 
-const Image = mongoose.model('Image', imageSchema);
+
+const Property = mongoose.model('Property', propertySchema);
+const rootUrl = 'https://s3-us-west-1.amazonaws.com/fec.hr/'
+const imageURLs = ['picture+3.webp', 'da605a0a861ae3de054b8fa4cc72e76c-full.webp', '53b836d18c606987f71ce40ae82e799b-full.webp', '0ce6300a53db0f892c5673e871aa3848-full.webp', '0af3ffab025f9a8a151bc4e66183d7ff-full.webp', '3c8f37b0e8e1410701c41d6edd013522-full.webp', '586c2bb66706fba4635ff30436e81505-full.webp', 'ecdcdb326f9b0a00de1e9e10888b3635-full.webp']
 
 // probably going to need to shape the data and save it into our database.
 
-var save = function(data) {
+function createRecord(id) {
+  // how do i generate the related properties?
+  // can set teh bed and baths up here as variables.
 
-  //create an options object to shape our data
-  var options = {
-    id: 1,
-    Address: 'Abbey Lane',
-    Beds: 2,
-    Baths: 2,
-    Sqft: 5000
-  }
+  //each record on your schema should be a product page
+  // wait does that mean that each thing on our schema will need to have
 
-  // for each of our data, .save into our database.
-  var house = new Image(options);
-  house.save((err) => {
-    if(err) {
-      console.log('error in save', err);
-    } else {
-      console.log('saved in database!');
-    }
-  });
+  let dataObj = {
+    id: id,
+    // need to figue out how to turn these into id numbers?
+    relatedProperties: [1,2,3,4,5], // an array of id numbers. When query, try to find ID numbers. Find all documents that have ID numbers in this array.
+    price: 1000000 + Math.floor(Math.random() * 5000000),
+    streetAddress: faker.address.streetAddress(),
+    city: faker.address.city(),
+    state: 'Atlanta',
+    zipCode: faker.address.zipCode(),
+    Beds: 2 + Math.floor(Math.random() * 3),
+    Baths: 2 + Math.floor(Math.random() * 1),
+    Sqft: 4000 + Math.floor(Math.random() * 2000),
+    imageURL: rootUrl + imageURLs[id%8],
+    favorites: false
+  };
+
+  return dataObj;
 }
 
-//save();
+var save = function(entries) {
+  let created = 1;
+  while (created <= entries) {
+    let options = createRecord(created);
+    var house = new Property(options);
+    house.save((err) => {
+      if(err) {
+        console.log('error in save', err);
+      } else {
+        //console.log('saved in database!');
+      }
+    });
+    created++;
+  }
+
+
+  // for each of our data, .save into our database.
+
+}
+var fetch = function(callback) {
+  Property.find(null, {id: 1, imageURL: 1}).limit(10).exec(callback);
+}
+
+save(8);
 //getData.getData();
+module.exports = {
+  save,
+  fetch
+}
