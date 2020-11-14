@@ -6,8 +6,10 @@ mongoose.connect('mongodb://localhost/realestate', {useNewUrlParser: true}).catc
     console.log('error connecting! ', err);
   }
 });
+
 // NEED TO WRITE TESTS.
 // NEED TO WRITE GET REQUESTS
+
 
 // need to know neighborhood of primary record
 //will need a property schema
@@ -36,6 +38,7 @@ const propertySchema = new mongoose.Schema({
   favorites: Boolean
 })
 // other schema, all the related properties. Two query strings.
+
 
 
 const Property = mongoose.model('Property', propertySchema);
