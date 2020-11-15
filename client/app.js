@@ -73,7 +73,7 @@ const ImageDiv = styled.div`
   border: solid;
   border-color: transparent;
   // //display: flex;
-  // position: relative;
+   position: relative;
   // z-index: 0;
    height: 160px;
 
@@ -133,7 +133,17 @@ background-color: rgb(255, 255, 255);
 color: rgb(0, 120, 130);
 border-color: transparent;
 `
-
+const HeartIcon = styled.i`
+  position: absolute;
+  font-size: 25px;
+  top: 0;
+  right: 0;
+  margin-top: 10px;
+  margin-right: 10px;
+  color: rgba(0,0,0,0.4);;
+  -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: white;
+`
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -181,7 +191,7 @@ class App extends React.Component {
               {this.state.properties.length > 0 ? this.state.properties.map((image, index) => (
                 <CellBox key={index}>
                   <ImageDiv>
-                    <Image src={image.imageURL}/>
+                    <Image src={image.imageURL}/><HeartIcon className="fas fa-heart"></HeartIcon>
                   </ImageDiv>
                   <DescriptionBox>
                     <Price>$2,245,000</Price>
