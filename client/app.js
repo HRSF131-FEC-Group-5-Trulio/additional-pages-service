@@ -45,13 +45,18 @@ const CellBox = styled.div`
   `;
 
   const Image = styled.img`
-     width: 100%;
+   &{  width: 100%;
      height: 100%;
     // object-fit: cover;
     // position: relative;
     // display: flex;
      border-radius: 8px;
     // box-sizing: border-box;
+    transition: transform 1.5s ease;
+   }
+    &:hover{
+      transform: scale(1.2);
+    }
 `
 const Price = styled.div`
   // flex-direction: row;
@@ -67,6 +72,7 @@ const Price = styled.div`
   //   outline: none;
 `
 const ImageDiv = styled.div`
+&{
   // border: solid;
   background: white;
   border-radius: 8px;
@@ -76,6 +82,9 @@ const ImageDiv = styled.div`
    position: relative;
   // z-index: 0;
    height: 160px;
+   overflow:hidden;
+}
+
 
 `
 const Neighborhood = styled.div`
@@ -142,7 +151,7 @@ const HeartIcon = styled.i`
   margin-right: 10px;
   color: rgba(0,0,0,0.4);;
   -webkit-text-stroke-width: 3px;
-    -webkit-text-stroke-color: white;
+  -webkit-text-stroke-color: white;
 `
 class App extends React.Component {
   constructor(props) {
