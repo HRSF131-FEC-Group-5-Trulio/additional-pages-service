@@ -70,7 +70,8 @@ const ImageDiv = styled.div`
   // border: solid;
   background: white;
   border-radius: 8px;
-  // border-color: transparent;
+  border: solid;
+  border-color: transparent;
   // //display: flex;
   // position: relative;
   // z-index: 0;
@@ -110,7 +111,7 @@ const NeighborhoodName = styled.div`
 `
 
 const Flag = styled.i`
-  font-size: 30px;
+  font-size: 20px;
   color: darkgray;
   height: 40px;
 `
@@ -143,13 +144,17 @@ class App extends React.Component {
 
   mouseEnterHandler(e) {
     var takeALookButton = e.target.getElementsByTagName('button')[0];
-    takeALookButton.style.background = 'rgb(0, 120, 130)';
-    takeALookButton.style.color = 'white';
+    if(takeALookButton) {
+      takeALookButton.style.background = 'rgb(0, 120, 130)';
+      takeALookButton.style.color = 'white';
+    }
   }
   mouseLeaveHandler(e) {
     var takeALookButton = e.target.getElementsByTagName('button')[0];
-    takeALookButton.style.background = 'white';
-    takeALookButton.style.color = 'rgb(0, 120, 130)';
+    if(takeALookButton) {
+      takeALookButton.style.background = 'white';
+      takeALookButton.style.color = 'rgb(0, 120, 130)';
+    }
   }
 
   componentDidMount() {
@@ -185,10 +190,9 @@ class App extends React.Component {
                     <div>Midtown, Atlanta, GA</div>
                   </DescriptionBox>
                 </CellBox>
-              )
-
-              ) : ''}{<CellBox key={this.state.properties.length} onMouseEnter={(e)=> this.mouseEnterHandler(e)} onMouseLeave = {(e) => this.mouseLeaveHandler(e)}>
-              <ImageDiv>
+              )) : ''}
+              {<CellBox key={this.state.properties.length} >
+              <ImageDiv onMouseEnter={(e)=> this.mouseEnterHandler(e)} onMouseLeave = {(e) => this.mouseLeaveHandler(e)}>
                 <Neighborhood>
                 <Flag className="far fa-flag"></Flag>
                   <NeightborhoodDescription>See more Homes for Sale in<br/>
