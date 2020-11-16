@@ -84,8 +84,10 @@ const ImageDiv = styled.div`
    height: 160px;
    overflow:hidden;
 }
-
-
+&:hover button{
+  background-color: rgb(0, 120, 130);
+  color: rgb(255, 255, 255);
+}
 `
 const Neighborhood = styled.div`
   display: block;
@@ -141,6 +143,7 @@ padding: 8px 16px;
 background-color: rgb(255, 255, 255);
 color: rgb(0, 120, 130);
 border-color: transparent;
+
 `
 const HeartIcon = styled.i`
   position: absolute;
@@ -152,6 +155,9 @@ const HeartIcon = styled.i`
   color: rgba(0,0,0,0.4);;
   -webkit-text-stroke-width: 3px;
   -webkit-text-stroke-color: white;
+  &:hover{
+    color: white;
+  }
 `
 class App extends React.Component {
   constructor(props) {
@@ -161,20 +167,12 @@ class App extends React.Component {
     };
   }
 
-  mouseEnterHandler(e) {
-    var takeALookButton = e.target.getElementsByTagName('button')[0];
-    if(takeALookButton) {
-      takeALookButton.style.background = 'rgb(0, 120, 130)';
-      takeALookButton.style.color = 'white';
-    }
-  }
-  mouseLeaveHandler(e) {
-    var takeALookButton = e.target.getElementsByTagName('button')[0];
-    if(takeALookButton) {
-      takeALookButton.style.background = 'white';
-      takeALookButton.style.color = 'rgb(0, 120, 130)';
-    }
-  }
+  /*
+  click handler for the heart. should change the css of the heart to toggle fill in and not fill in.
+  post request to mark this favorite as not whatever it is now.
+
+
+  */
 
   componentDidMount() {
     //ajax call to the server to get stuff from the database.
@@ -211,7 +209,7 @@ class App extends React.Component {
                 </CellBox>
               )) : ''}
               {<CellBox key={this.state.properties.length} >
-              <ImageDiv onMouseEnter={(e)=> this.mouseEnterHandler(e)} onMouseLeave = {(e) => this.mouseLeaveHandler(e)}>
+              <ImageDiv >
                 <Neighborhood>
                 <Flag className="far fa-flag"></Flag>
                   <NeightborhoodDescription>See more Homes for Sale in<br/>
@@ -228,6 +226,4 @@ class App extends React.Component {
 }
 
 export default App;
-
-//ReactDOM.render(<App />, document.getElementById('root'));
 
