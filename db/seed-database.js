@@ -94,6 +94,8 @@ var fetch = function(callback) {
   Property.find(null, {id: 1, imageURL: 1}).limit(10).exec(callback);
 }
 
+//will be an update function to update the data. 
+
 save(8);
 //getData.getData();
 module.exports = {
