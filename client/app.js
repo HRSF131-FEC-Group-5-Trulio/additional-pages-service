@@ -164,8 +164,30 @@ const HeartIcon = styled.i`
 
 const FavoritesLink = styled.button`
   float: right;
+  display: inline-block;
   font-size: 15px;
+  position: relative;
+  color: rgb(0, 120, 130);
+  background-color: white;
+  border-radius: 8px;
+  border: solid;
+  border-color: rgb(0, 120, 130);
+  font-weight: bold;
+  &:hover {
+    transform: scale(1.0); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    //font-weight: bold;
+    //font-size: 20px;
+    background-color: rgb(0, 120, 130);
+    color: white;
+    border-color: transparent;
+  }
 
+`
+const TitleContainer = styled.div`
+  display:inline-block;
+  //top: 50px;
+  width: 100%;
+  //border: solid;
 `
 
 class App extends React.Component {
@@ -224,8 +246,8 @@ class App extends React.Component {
       console.log('error in get: ', error);
     })
   }
-  numberWithCommas(x) {
-    x = Math.round(x/1000)*1000
+  numberWithCommas(x, roundToNearest) {
+    x = Math.round(x/roundToNearest)*roundToNearest
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
@@ -234,7 +256,7 @@ class App extends React.Component {
       .then((response) => {
         console.log(response);
         var properties = JSON.parse(response.data);
-        console.log(properties.length);
+        console.log(properties);
         this.setState({properties});
         // also update the database to set all favorites to false. either that or set the heart to red conidtionally.
         axios.post('/resetFavorites').then(response => {
@@ -248,7 +270,10 @@ class App extends React.Component {
     render() {
         return (
           <div className="hello">
-            <h3>Similar Homes You May Like</h3>
+            <TitleContainer>
+            <h2 >Similar Homes You May Like</h2>
+            <FavoritesLink onClick={e => {this.showModal();}}>View your favorites list!</FavoritesLink>
+            </TitleContainer>
             <FlexContainer>
               {this.state.properties.length > 0 ? this.state.properties.map((image, index) => (
                 <CellBox key={index}>
@@ -256,8 +281,8 @@ class App extends React.Component {
                     <Image src={image.imageURL}/><HeartIcon id={image.id} onClick={(e) => this.handleHeartClick(e)} className="fas fa-heart"></HeartIcon>
                   </ImageDiv>
                   <DescriptionBox>
-                    <Price>${this.numberWithCommas(image.price)}</Price>
-                    <div className="bedBath"><i className="fas fa-bed"></i> {image.Beds}bd, <i className="fas fa-bath"></i> {image.Baths}ba, <i className="fas fa-campground"></i> {image.sqft}sqft</div>
+                    <Price>${this.numberWithCommas(image.price, 1000)}</Price>
+                    <div className="bedBath"><i className="fas fa-bed"></i> {image.Beds}bd, <i className="fas fa-bath"></i> {image.Baths}ba, <i className="fas fa-campground"></i> {this.numberWithCommas(image.Sqft, 10)}sqft</div>
                     <div>{image.streetAddress}</div>
                     <div>{`${image.city}, ATL, ${image.zipCode}`}</div>
                   </DescriptionBox>
@@ -275,7 +300,7 @@ class App extends React.Component {
               </ImageDiv>
             </CellBox>}
             </FlexContainer>
-            <FavoritesLink onClick={e => {this.showModal();}}>See your favorites!</FavoritesLink>
+
             <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.favoriteList} >
               {
                 /*
