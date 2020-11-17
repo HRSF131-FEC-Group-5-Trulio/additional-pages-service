@@ -116,6 +116,10 @@ var post = function(id, callback) {
   })
 }
 
+var resetFavorites = function(callback) {
+  Property.updateMany({}, { $set: { favorites: false} }, callback);
+}
+
 //save(8);
 //getData.getData();
 module.exports = {
@@ -123,5 +127,6 @@ module.exports = {
   fetch,
   fetchById,
   post,
-  getAllFavorites
+  getAllFavorites,
+  resetFavorites
 }

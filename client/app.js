@@ -173,7 +173,7 @@ class App extends React.Component {
     super(props);
     this.state= {
       properties: [],
-      favoriteList:['hello1', 'hello2'],
+      favoriteList:[],
       show: false,
     };
   }
@@ -187,9 +187,7 @@ class App extends React.Component {
   showModal (){
     this.setState({ show: true });
   }
-
   hideModal () {
-    console.log('in hideModal')
     this.setState({ show: false });
   }
   handleHeartClick(e) {
@@ -208,12 +206,14 @@ class App extends React.Component {
         console.log(response);
         //var parsed = JSON.parse(response.data);
         //this.setState({favoriteList: parsed});
+        this.getFavorites();
       })
       .catch(function (error) {
       console.log('error in post: ', error);
     })
   }
   getFavorites() {
+    //need to reset favorites or keep favorite status...
     axios.get('/favorites')
       .then((response) => {
         console.log(response);
@@ -224,6 +224,10 @@ class App extends React.Component {
       console.log('error in get: ', error);
     })
   }
+  numberWithCommas(x) {
+    x = Math.round(x/1000)*1000
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
   componentDidMount() {
     axios.get('/property')
@@ -232,6 +236,10 @@ class App extends React.Component {
         var properties = JSON.parse(response.data);
         console.log(properties.length);
         this.setState({properties});
+        // also update the database to set all favorites to false. either that or set the heart to red conidtionally.
+        axios.post('/resetFavorites').then(response => {
+          console.log('favorites reset!')
+        })
       })
       .catch(function (error) {
       console.log('error in get: ', error);
@@ -248,10 +256,10 @@ class App extends React.Component {
                     <Image src={image.imageURL}/><HeartIcon id={image.id} onClick={(e) => this.handleHeartClick(e)} className="fas fa-heart"></HeartIcon>
                   </ImageDiv>
                   <DescriptionBox>
-                    <Price>$2,245,000</Price>
-                    <div className="bedBath"><i className="fas fa-bed"></i> 6bd, <i className="fas fa-bath"></i> 6ba, <i className="fas fa-campground"></i> 5846sqft</div>
-                    <div>405 9th St NE</div>
-                    <div>Midtown, Atlanta, GA</div>
+                    <Price>${this.numberWithCommas(image.price)}</Price>
+                    <div className="bedBath"><i className="fas fa-bed"></i> {image.Beds}bd, <i className="fas fa-bath"></i> {image.Baths}ba, <i className="fas fa-campground"></i> {image.sqft}sqft</div>
+                    <div>{image.streetAddress}</div>
+                    <div>{`${image.city}, ATL, ${image.zipCode}`}</div>
                   </DescriptionBox>
                 </CellBox>
               )) : ''}

@@ -45,3 +45,13 @@ app.get('/favorites', (req,res) => {
     res.json(JSON.stringify(data));
   })
 });
+app.post('/resetFavorites', (req, res) => {
+  db.resetFavorites((err, data) => {
+    if(err) {
+      console.log('error resetting!!', err);
+      res.sendStatus(404);
+    }
+    res.status(200);
+    res.end();
+  })
+})

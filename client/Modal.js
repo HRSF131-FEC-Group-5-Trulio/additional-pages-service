@@ -102,7 +102,7 @@ class Modal extends React.Component {
         <CloseButton href="#" className="close" onClick={this.props.handleClose}/>
           <SearchBar/>
           <FavoritesContainer>
-            {this.props.favorites.map(favorite=> {return <div>{favorite}</div>})}
+            {this.props.favorites.map(favorite=> {return <div key={favorite.id}>{favorite.streetAddress}</div>})}
           </FavoritesContainer>
         </section>
       </StyledModal>
