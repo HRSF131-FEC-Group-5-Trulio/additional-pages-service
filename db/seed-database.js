@@ -91,14 +91,37 @@ var save = function(entries) {
 
 }
 var fetch = function(callback) {
-  Property.find(null, {id: 1, imageURL: 1}).limit(10).exec(callback);
+  Property.findOne({id: 1}, {id: 1, imageURL: 1, relatedProperties: 1}).exec(callback);
+}
+var fetchById = function(relatedProperties, callback) {
+  Property.find({id: relatedProperties}, callback);
+  //{id: 1, imageURL: 1, streetAddress: 1, city: 1, state: 1, Beds: 1, Baths: 1, Sqft: 1,  }
 }
 
-//will be an update function to update the data. 
+var getAllFavorites = function(callback) {
+  Property.find({favorites: true}, callback);
+}
 
-save(8);
+//will be an update function to update the data.
+var post = function(callback) {
+  Property.findOne({id: 1}, (err, data) => {
+    console.log(data);
+    //var reset = false;
+    var toggle = !data.favorites;
+    Property.updateOne({id:1}, {favorites: toggle}, () =>{
+      console.log('after: ', data);
+      callback();
+    })
+
+  })
+}
+
+//save(8);
 //getData.getData();
 module.exports = {
   save,
-  fetch
+  fetch,
+  fetchById,
+  post,
+  getAllFavorites
 }

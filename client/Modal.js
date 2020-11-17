@@ -16,7 +16,7 @@ const StyledModal = styled.div`
     // justify-content: center;
     position:fixed;
     background: white;
-    width: 40%;
+    width: 45%;
     height: 80%;
     top:50%;
     left:50%;
@@ -84,28 +84,30 @@ const FavoritesContainer = styled.div`
   left: 75px;
 `
 
+//Add a shadow??
+class Modal extends React.Component {
+  constructor(props) {
+    super(props);
 
-const Modal = ({ handleClose, show, children, favorites }) => {
-  const showHideClassName = show ? 'modal display-block' : 'modal display-none';
-  function stopPropagation(e) {
+  }
+  stopPropagation(e) {
     e.stopPropagation();
   }
 
-  return (
-    <StyledModal className={showHideClassName} onClick={handleClose}>
-      <section className='modal-main'  onClick={stopPropagation}>
-      <CloseButton href="#" className="close" onClick={handleClose}/>
-        <SearchBar/>
-    <FavoritesContainer>
-  {favorites.map(favorite=> {
-    return <div>{favorite}</div>
-  })
-}
-</FavoritesContainer>
-
-      </section>
-    </StyledModal>
-  );
+  render(){
+    const showHideClassName = this.props.show ? 'modal display-block' : 'modal display-none';
+    return (
+      <StyledModal className={showHideClassName} onClick={this.props.handleClose}>
+        <section className='modal-main'  onClick={this.stopPropagation}>
+        <CloseButton href="#" className="close" onClick={this.props.handleClose}/>
+          <SearchBar/>
+          <FavoritesContainer>
+            {this.props.favorites.map(favorite=> {return <div>{favorite}</div>})}
+          </FavoritesContainer>
+        </section>
+      </StyledModal>
+    );
+  }
 };
 
 export default Modal

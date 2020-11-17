@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import styled from 'styled-components';
 import Modal from "./Modal";
+import axios from "axios";
 //probably will import a slider from react-slick;
 
 // need to import an icon library and put it into component.
@@ -172,7 +173,6 @@ class App extends React.Component {
     super(props);
     this.state= {
       properties: [],
-      favorite:[],
       favoriteList:['hello1', 'hello2'],
       show: false,
     };
@@ -184,35 +184,57 @@ class App extends React.Component {
 
 
   */
- showModal (){
-  this.setState({ show: true });
-}
+  showModal (){
+    this.setState({ show: true });
+  }
 
-hideModal () {
-  console.log('in hideModal')
-  this.setState({ show: false });
-}
+  hideModal () {
+    console.log('in hideModal')
+    this.setState({ show: false });
+  }
   handleHeartClick(e) {
     //console.log(e.target.style.color);
     e.target.style.color = e.target.style.color !== 'red'? 'red': 'rgba(0,0,0,0.4)';
+    console.log(e.target);
     // set the state
+    //this.toggleFavoriteStatus();
+  }
+  toggleFavoriteStatus(e) {
+    //use e.target.id
+    console.log('target: ', e.currentTarget.parentNode);
+    // send a post request
+    // axios.post('/favorites')
+    //   .then((response) => {
+    //     console.log(response);
+    //     var parsed = JSON.parse(response.data);
+    //     this.setState({favoriteList: parsed});
+    //   })
+    //   .catch(function (error) {
+    //   console.log('error in get: ', error);
+    // })
+  }
+  getFavorites() {
+    axios.get('/favorites')
+      .then((response) => {
+        console.log(response);
+        var parsed = JSON.parse(response.data);
+        this.setState({favoriteList: parsed});
+      })
+      .catch(function (error) {
+      console.log('error in get: ', error);
+    })
   }
 
   componentDidMount() {
-    //ajax call to the server to get stuff from the database.
-    $.ajax({
-      url: 'http://localhost:3000/property',
-      method: 'GET',
-      success: (data) => {
-        console.log('ajax request succesful!' + data);
-        var parsed = JSON.parse(data);
-        // set the favorite state.
-        this.setState({properties: parsed});
-        //console.log(data[0].imageURL)
-      },
-      error: (err) => {
-        //console.log('ajax request error' + err);
-      }
+    axios.get('/property')
+      .then((response) => {
+        console.log(response);
+        var properties = JSON.parse(response.data);
+        console.log(properties.length);
+        this.setState({properties});
+      })
+      .catch(function (error) {
+      console.log('error in get: ', error);
     })
   }
     render() {

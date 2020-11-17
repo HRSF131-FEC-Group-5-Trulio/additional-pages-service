@@ -9,15 +9,36 @@ app.listen(3000);
 console.log('listening at port 3000');
 
 app.get('/property', (req, res) => {
-  // need to query the database for property stuff.
-  // the fact that this is an error first is in mongoose docs?
   db.fetch((err, data) => {
+    if(err) {
+      console.log('error in getproperty: ', err);
+      res.sendStatus(404);
+    }
     console.log('this is data: ', data)
-    res.status(200);
-    // when do you JSON.stringify vs not?
-    res.end(JSON.stringify(data));
-
+      db.fetchById(data.relatedProperties, (err, properties) => {
+        console.log('in fetchbyId')
+        res.json(JSON.stringify(properties));
+      });
   })
 });
 
-// app.post to /favorites, 
+// app.post to /favorites,
+app.post('/favorites', (req, res) => {
+  db.post((err, data) => {
+    if(err) {
+      console.log('error in post: ', err);
+      res.sendStatus(404);
+    }
+    res.json(data);
+  })
+});
+
+app.get('/favorites', (req,res) => {
+  db.getAllFavorites((err, data) => {
+    if(err) {
+      console.log('error in get: ', err);
+      res.sendStatus(404);
+    }
+    res.json(JSON.stringify(data));
+  })
+});

@@ -12,13 +12,12 @@ background:#F2F1F9;
   padding:0.5rem;
   margin-top: 20px;
   height: 20px;
-  width:20rem;
+  width:55%;
   //width: 80%;
-background: black;
+background: white;
 `
 
 const SearchBar = ({keyword,setKeyword}) => {
-  //const BarStyling = {width:"20rem",background:"#F2F1F9", border:"none", padding:"0.5rem", position:};
   return (
     <Search
      key="random1"
