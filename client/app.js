@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import styled from 'styled-components';
+import Modal from "./Modal";
 //probably will import a slider from react-slick;
 
 // need to import an icon library and put it into component.
@@ -52,10 +53,10 @@ const CellBox = styled.div`
     // display: flex;
      border-radius: 8px;
     // box-sizing: border-box;
-    transition: transform 1.5s ease;
+    transition: transform 1.3s ease;
    }
     &:hover{
-      transform: scale(1.2);
+      transform: scale(1.1);
     }
 `
 const Price = styled.div`
@@ -152,18 +153,28 @@ const HeartIcon = styled.i`
   right: 0;
   margin-top: 10px;
   margin-right: 10px;
-  color: rgba(0,0,0,0.4);;
+  color: rgba(0,0,0,0.4);
   -webkit-text-stroke-width: 3px;
   -webkit-text-stroke-color: white;
-  &:hover{
-    color: white;
-  }
+  // &:hover{
+  //   color: red;
+  // }
 `
+
+const FavoritesLink = styled.button`
+  float: right;
+  font-size: 15px;
+
+`
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state= {
       properties: [],
+      favorite:[],
+      favoriteList:['hello1', 'hello2'],
+      show: false,
     };
   }
 
@@ -173,6 +184,19 @@ class App extends React.Component {
 
 
   */
+ showModal (){
+  this.setState({ show: true });
+}
+
+hideModal () {
+  console.log('in hideModal')
+  this.setState({ show: false });
+}
+  handleHeartClick(e) {
+    //console.log(e.target.style.color);
+    e.target.style.color = e.target.style.color !== 'red'? 'red': 'rgba(0,0,0,0.4)';
+    // set the state
+  }
 
   componentDidMount() {
     //ajax call to the server to get stuff from the database.
@@ -182,6 +206,7 @@ class App extends React.Component {
       success: (data) => {
         console.log('ajax request succesful!' + data);
         var parsed = JSON.parse(data);
+        // set the favorite state.
         this.setState({properties: parsed});
         //console.log(data[0].imageURL)
       },
@@ -198,7 +223,7 @@ class App extends React.Component {
               {this.state.properties.length > 0 ? this.state.properties.map((image, index) => (
                 <CellBox key={index}>
                   <ImageDiv>
-                    <Image src={image.imageURL}/><HeartIcon className="fas fa-heart"></HeartIcon>
+                    <Image src={image.imageURL}/><HeartIcon onClick={this.handleHeartClick} className="fas fa-heart"></HeartIcon>
                   </ImageDiv>
                   <DescriptionBox>
                     <Price>$2,245,000</Price>
@@ -220,6 +245,16 @@ class App extends React.Component {
               </ImageDiv>
             </CellBox>}
             </FlexContainer>
+            <FavoritesLink onClick={e => {this.showModal();}}>See your favorites!</FavoritesLink>
+            <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.favoriteList} >
+              {
+                /*
+                maybe a search bar and a list of favorites.
+                */
+              }
+          <p>Modal</p>
+          <p>Data</p>
+        </Modal>
           </div>
         )
     }
