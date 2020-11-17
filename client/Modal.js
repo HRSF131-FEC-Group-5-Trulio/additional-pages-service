@@ -12,8 +12,8 @@ const StyledModal = styled.div`
   background: rgba(0, 0, 0, 0.6);
 
   & .modal-main {
-    display:grid;
-    justify-content: center;
+    // display:grid;
+    // justify-content: center;
     position:fixed;
     background: white;
     width: 40%;
@@ -75,7 +75,14 @@ const CloseButton = styled.a`
   transform: rotate(-45deg);
 }
 `
-
+const FavoritesContainer = styled.div`
+  position: absolute;
+  border: solid;
+  height: 85%;
+  width: 70%;
+  top: 75px;
+  left: 75px;
+`
 
 
 const Modal = ({ handleClose, show, children, favorites }) => {
@@ -88,12 +95,14 @@ const Modal = ({ handleClose, show, children, favorites }) => {
     <StyledModal className={showHideClassName} onClick={handleClose}>
       <section className='modal-main'  onClick={stopPropagation}>
       <CloseButton href="#" className="close" onClick={handleClose}/>
-        <SearchBar/> <br/>
-        hello
-  {/* {favorites.map(favorite=> {
-    return <div>{favorite}</div><br/>
-  })} */}
-        
+        <SearchBar/>
+    <FavoritesContainer>
+  {favorites.map(favorite=> {
+    return <div>{favorite}</div>
+  })
+}
+</FavoritesContainer>
+
       </section>
     </StyledModal>
   );

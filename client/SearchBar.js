@@ -3,7 +3,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 const Search = styled.input`
-
+position: absolute;
+left: 15%;
+//width: 100%;
+//text-align: center;
 background:#F2F1F9;
  border:solid;
   padding:0.5rem;
@@ -11,7 +14,7 @@ background:#F2F1F9;
   height: 20px;
   width:20rem;
   //width: 80%;
-
+background: black;
 `
 
 const SearchBar = ({keyword,setKeyword}) => {
