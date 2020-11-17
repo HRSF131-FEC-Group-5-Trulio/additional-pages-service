@@ -103,12 +103,12 @@ var getAllFavorites = function(callback) {
 }
 
 //will be an update function to update the data.
-var post = function(callback) {
-  Property.findOne({id: 1}, (err, data) => {
-    console.log(data);
+var post = function(id, callback) {
+  Property.findOne({id}, (err, data) => {
+    //console.log(data);
     //var reset = false;
     var toggle = !data.favorites;
-    Property.updateOne({id:1}, {favorites: toggle}, () =>{
+    Property.updateOne({id}, {favorites: toggle}, () =>{
       console.log('after: ', data);
       callback();
     })

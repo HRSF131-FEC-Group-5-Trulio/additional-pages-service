@@ -195,23 +195,23 @@ class App extends React.Component {
   handleHeartClick(e) {
     //console.log(e.target.style.color);
     e.target.style.color = e.target.style.color !== 'red'? 'red': 'rgba(0,0,0,0.4)';
-    console.log(e.target);
+    console.log(e.target.id);
+    let id = +e.target.id;
     // set the state
-    //this.toggleFavoriteStatus();
+    this.toggleFavoriteStatus(id);
   }
-  toggleFavoriteStatus(e) {
+  toggleFavoriteStatus(id) {
     //use e.target.id
-    console.log('target: ', e.currentTarget.parentNode);
     // send a post request
-    // axios.post('/favorites')
-    //   .then((response) => {
-    //     console.log(response);
-    //     var parsed = JSON.parse(response.data);
-    //     this.setState({favoriteList: parsed});
-    //   })
-    //   .catch(function (error) {
-    //   console.log('error in get: ', error);
-    // })
+    axios.post('/favorites',{id})
+      .then((response) => {
+        console.log(response);
+        //var parsed = JSON.parse(response.data);
+        //this.setState({favoriteList: parsed});
+      })
+      .catch(function (error) {
+      console.log('error in post: ', error);
+    })
   }
   getFavorites() {
     axios.get('/favorites')
@@ -245,7 +245,7 @@ class App extends React.Component {
               {this.state.properties.length > 0 ? this.state.properties.map((image, index) => (
                 <CellBox key={index}>
                   <ImageDiv>
-                    <Image src={image.imageURL}/><HeartIcon onClick={this.handleHeartClick} className="fas fa-heart"></HeartIcon>
+                    <Image src={image.imageURL}/><HeartIcon id={image.id} onClick={(e) => this.handleHeartClick(e)} className="fas fa-heart"></HeartIcon>
                   </ImageDiv>
                   <DescriptionBox>
                     <Price>$2,245,000</Price>
