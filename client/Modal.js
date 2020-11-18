@@ -12,7 +12,8 @@ const StyledModal = styled.div`
   background: rgba(0, 0, 0, 0.6);
 
   & .modal-main {
-    // display:grid;
+    // display:flex;
+    // flex-direction: vertical
     // justify-content: center;
     position:fixed;
     background: white;
@@ -26,9 +27,13 @@ const StyledModal = styled.div`
     border-color: green;
   }
   &.display-block {
-    display: block;
-  }
+    display: flex;
+    //flex-direction: column;
+    justify-content: center;
+    //width: 100%;
+    text-align:center;
 
+  }
   &.display-none {
     display: none;
   }
@@ -76,12 +81,28 @@ const CloseButton = styled.a`
 }
 `
 const FavoritesContainer = styled.div`
-  position: absolute;
-  border: solid;
-  height: 85%;
-  width: 70%;
-  top: 75px;
-  left: 75px;
+  // position: absolute;
+  text-align: left;
+  top:50%;
+   border: solid;
+   height: 85%;
+   width: 70%;
+   margin-top: 20px;
+   margin-left: auto;
+   margin-right: auto;
+  //  display:inline-block;
+   //float: left;
+   //padding-top: 75px;
+  // align-items: center;
+   //top: 75px;
+  // left: 75px;
+`
+const FavoriteImage = styled.img`
+  height: 30px;
+  width: 30px;
+`
+const FavoriteContainer = styled.div`
+
 `
 
 //Add a shadow??
@@ -89,6 +110,10 @@ class Modal extends React.Component {
   constructor(props) {
     super(props);
 
+  }
+  numberWithCommas(x, roundToNearest) {
+    x = Math.round(x/roundToNearest)*roundToNearest
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   stopPropagation(e) {
     e.stopPropagation();
@@ -102,7 +127,14 @@ class Modal extends React.Component {
         <CloseButton href="#" className="close" onClick={this.props.handleClose}/>
           <SearchBar/>
           <FavoritesContainer>
-            {this.props.favorites.map(favorite=> {return <div key={favorite.id}>{favorite.streetAddress}</div>})}
+            {this.props.favorites.map(favorite=> {return (
+              <FavoriteContainer>
+                <FavoriteImage src={favorite.imageURL}></FavoriteImage>
+                <div key={favorite.id}>{`${favorite.streetAddress}, ${favorite.city}, ATL, ${favorite.zipCode}`}</div>
+                <div>${this.numberWithCommas(favorite.price, 1000)}</div>
+              </FavoriteContainer>
+            )}
+            )}
           </FavoritesContainer>
         </section>
       </StyledModal>

@@ -163,10 +163,13 @@ const HeartIcon = styled.i`
 `
 
 const FavoritesLink = styled.button`
-  float: right;
+  //float: right;
+  right: 0;
+  bottom: 0;
   display: inline-block;
   font-size: 15px;
-  position: relative;
+  position: absolute;
+
   color: rgb(0, 120, 130);
   background-color: white;
   border-radius: 8px;
@@ -184,10 +187,9 @@ const FavoritesLink = styled.button`
 
 `
 const TitleContainer = styled.div`
-  display:inline-block;
-  //top: 50px;
+  display:flex;
+  position: relative;
   width: 100%;
-  //border: solid;
 `
 
 class App extends React.Component {
