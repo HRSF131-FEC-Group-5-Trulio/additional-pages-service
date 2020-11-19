@@ -1,12 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import Modal from "./Modal";
 import axios from "axios";
-//probably will import a slider from react-slick;
-
-// need to import an icon library and put it into component.
+//probably will need to import fonts eventually.
 
 const DescriptionBox = styled.div`
   //display: block;
@@ -15,16 +13,21 @@ const DescriptionBox = styled.div`
   //box-sizing: border-box;
   padding: 8px 0px 0px;
 `;
+
 const FlexContainer = styled.div`
 &{
    display: flex;
+   position: relative;
   //  flex-wrap: nowrap;
     overflow-x: auto;
     margin-left: -8px;
     margin-right: -8px;
     margin-top: -16px;
     border: solid;
+    //width: 500px;
+    //height: 200px;
     border-color: transparent;
+    // background-color: black;
  }
  &::-webkit-scrollbar {
     display: none;
@@ -39,7 +42,7 @@ const CellBox = styled.div`
   border-width: 16px 8px 0px;
   box-sizing: border-box;
   line-height: 24px;
-  display: block;
+  //display: block;
   flex-shrink: 0;
   //flex-basis: auto;
   // min-width: 224px;
@@ -177,9 +180,7 @@ const FavoritesLink = styled.button`
   border-color: rgb(0, 120, 130);
   font-weight: bold;
   &:hover {
-    transform: scale(1.0); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-    //font-weight: bold;
-    //font-size: 20px;
+    transform: scale(1.0);
     background-color: rgb(0, 120, 130);
     color: white;
     border-color: transparent;
@@ -191,6 +192,56 @@ const TitleContainer = styled.div`
   position: relative;
   width: 100%;
 `
+const Item = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+height: 250px;
+width: 100%;
+background-color: #683bb7;
+color: #fff;
+margin: 15px;
+font-size: 4em;
+`
+
+const NextAndPrevious = css`
+  border: 1px solid rgb(232, 233, 234);
+  position: absolute;
+   width: 30px;
+   height: 30px;
+  //padding: 10px 10px 10px 10px;
+  //min-width: 50px;
+  background: #fff;
+  color: black;
+  top: 125px;
+  border-radius: 50%;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  line-height: 30px;
+  text-align: center;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: -1px 8px 21px -11px rgba(0,0,0,0.58);
+  }
+
+`
+const PreviousButton = styled.i`
+
+  ${NextAndPrevious}
+  left: 0;
+`
+
+const NextButton = styled.i`
+
+  &{
+    ${NextAndPrevious}
+  }
+  right: 0;
+`
+
 
 class App extends React.Component {
   constructor(props) {
@@ -199,15 +250,10 @@ class App extends React.Component {
       properties: [],
       favoriteList:[],
       show: false,
+      showSlides:[],
     };
   }
 
-  /*
-  click handler for the heart. should change the css of the heart to toggle fill in and not fill in.
-  post request to mark this favorite as not whatever it is now.
-
-
-  */
   showModal (){
     this.setState({ show: true });
   }
@@ -223,13 +269,9 @@ class App extends React.Component {
     this.toggleFavoriteStatus(id);
   }
   toggleFavoriteStatus(id) {
-    //use e.target.id
-    // send a post request
     axios.post('/favorites',{id})
       .then((response) => {
         console.log(response);
-        //var parsed = JSON.parse(response.data);
-        //this.setState({favoriteList: parsed});
         this.getFavorites();
       })
       .catch(function (error) {
@@ -237,7 +279,6 @@ class App extends React.Component {
     })
   }
   getFavorites() {
-    //need to reset favorites or keep favorite status...
     axios.get('/favorites')
       .then((response) => {
         console.log(response);
@@ -260,7 +301,6 @@ class App extends React.Component {
         var properties = JSON.parse(response.data);
         console.log(properties);
         this.setState({properties});
-        // also update the database to set all favorites to false. either that or set the heart to red conidtionally.
         axios.post('/resetFavorites').then(response => {
           console.log('favorites reset!')
         })
@@ -271,7 +311,7 @@ class App extends React.Component {
   }
     render() {
         return (
-          <div className="hello">
+          <div>
             <TitleContainer>
             <h2 >Similar Homes You May Like</h2>
             <FavoritesLink onClick={e => {this.showModal();}}>View your favorites list!</FavoritesLink>
@@ -289,8 +329,10 @@ class App extends React.Component {
                     <div>{`${image.city}, ATL, ${image.zipCode}`}</div>
                   </DescriptionBox>
                 </CellBox>
-              )) : ''}
-              {<CellBox key={this.state.properties.length} >
+
+              )) : <div>{''}</div>}
+              {
+                <CellBox key={this.state.properties.length} >
               <ImageDiv >
                 <Neighborhood>
                 <Flag className="far fa-flag"></Flag>
@@ -300,22 +342,20 @@ class App extends React.Component {
                   <TakeALookButton>Take a look</TakeALookButton>
                 </Neighborhood>
               </ImageDiv>
-            </CellBox>}
+            </CellBox>
+            }
+            {/* <i class="fas fa-angle-left"></i> */}
+            <PreviousButton className="fas fa-angle-left"></PreviousButton>
+            {/* <i class="fas fa-angle-right"></i> */}
+
+
+            <NextButton className="fas fa-angle-right"></NextButton>
             </FlexContainer>
 
-            <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.favoriteList} >
-              {
-                /*
-                maybe a search bar and a list of favorites.
-                */
-              }
-          <p>Modal</p>
-          <p>Data</p>
-        </Modal>
+            <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.favoriteList} ></Modal>
           </div>
         )
     }
 }
 
 export default App;
-

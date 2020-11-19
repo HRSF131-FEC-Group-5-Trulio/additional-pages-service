@@ -47,7 +47,7 @@ const imageURLs = ['picture+3.webp', 'da605a0a861ae3de054b8fa4cc72e76c-full.webp
 
 function createRecord(id) {
   // how do i generate the related properties?
-  // can set teh bed and baths up here as variables.
+  // can set the bed and baths up here as variables.
 
   //each record on your schema should be a product page
   // wait does that mean that each thing on our schema will need to have
