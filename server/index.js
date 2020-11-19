@@ -2,8 +2,10 @@ var express = require('express');
 var path = require('path');
 var db = require('../db/seed-database.js')
 var app = express();
+var bodyParser = require('body-parser')
 
 app.use(express.static(path.join(__dirname,'../public')));
+app.use(bodyParser.json());
 
 app.listen(3000);
 console.log('listening at port 3000');
@@ -24,7 +26,8 @@ app.get('/property', (req, res) => {
 
 // app.post to /favorites,
 app.post('/favorites', (req, res) => {
-  db.post((err, data) => {
+  // get the id sent in somehow.
+  db.post(req.body.id, (err, data) => {
     if(err) {
       console.log('error in post: ', err);
       res.sendStatus(404);
@@ -42,3 +45,13 @@ app.get('/favorites', (req,res) => {
     res.json(JSON.stringify(data));
   })
 });
+app.post('/resetFavorites', (req, res) => {
+  db.resetFavorites((err, data) => {
+    if(err) {
+      console.log('error resetting!!', err);
+      res.sendStatus(404);
+    }
+    res.status(200);
+    res.end();
+  })
+})

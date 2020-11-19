@@ -3,10 +3,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 const Search = styled.input`
-position: absolute;
+//position: absolute;
+display: inline block;
 left: 15%;
 //width: 100%;
 //text-align: center;
+margin-left: auto;
+   margin-right: auto;
 background:#F2F1F9;
  border:solid;
   padding:0.5rem;

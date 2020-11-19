@@ -10,7 +10,7 @@ module.exports = {
        loader: 'babel-loader',
        test: /\.js$/,
        exclude: /node_modules/
-      },
+        },
         {
           test: /\.css$/,
           use: [
@@ -23,6 +23,29 @@ module.exports = {
               }
             }
           ]
+        },
+        {
+          test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]',
+                outputPath: 'fonts/'
+              }
+            }
+          ]
+        },
+        {
+          test: /\.(png|jpg|gif)$/i,
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 8192,
+              },
+            },
+          ],
         }
       ]
      },

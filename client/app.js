@@ -1,12 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import Modal from "./Modal";
 import axios from "axios";
-//probably will import a slider from react-slick;
-
-// need to import an icon library and put it into component.
+//probably will need to import fonts eventually.
 
 const DescriptionBox = styled.div`
   //display: block;
@@ -15,16 +13,21 @@ const DescriptionBox = styled.div`
   //box-sizing: border-box;
   padding: 8px 0px 0px;
 `;
+
 const FlexContainer = styled.div`
 &{
    display: flex;
+   position: relative;
   //  flex-wrap: nowrap;
     overflow-x: auto;
     margin-left: -8px;
     margin-right: -8px;
     margin-top: -16px;
     border: solid;
+    //width: 500px;
+    //height: 200px;
     border-color: transparent;
+    // background-color: black;
  }
  &::-webkit-scrollbar {
     display: none;
@@ -39,7 +42,7 @@ const CellBox = styled.div`
   border-width: 16px 8px 0px;
   box-sizing: border-box;
   line-height: 24px;
-  display: block;
+  //display: block;
   flex-shrink: 0;
   //flex-basis: auto;
   // min-width: 224px;
@@ -163,55 +166,117 @@ const HeartIcon = styled.i`
 `
 
 const FavoritesLink = styled.button`
-  float: right;
+  //float: right;
+  right: 0;
+  bottom: 0;
+  display: inline-block;
   font-size: 15px;
+  position: absolute;
+
+  color: rgb(0, 120, 130);
+  background-color: white;
+  border-radius: 8px;
+  border: solid;
+  border-color: rgb(0, 120, 130);
+  font-weight: bold;
+  &:hover {
+    transform: scale(1.0);
+    background-color: rgb(0, 120, 130);
+    color: white;
+    border-color: transparent;
+  }
 
 `
+const TitleContainer = styled.div`
+  display:flex;
+  position: relative;
+  width: 100%;
+`
+const Item = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+height: 250px;
+width: 100%;
+background-color: #683bb7;
+color: #fff;
+margin: 15px;
+font-size: 4em;
+`
+
+const NextAndPrevious = css`
+  border: 1px solid rgb(232, 233, 234);
+  position: absolute;
+   width: 30px;
+   height: 30px;
+  //padding: 10px 10px 10px 10px;
+  //min-width: 50px;
+  background: #fff;
+  color: black;
+  top: 125px;
+  border-radius: 50%;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  line-height: 30px;
+  text-align: center;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: -1px 8px 21px -11px rgba(0,0,0,0.58);
+  }
+
+`
+const PreviousButton = styled.i`
+
+  ${NextAndPrevious}
+  left: 0;
+`
+
+const NextButton = styled.i`
+
+  &{
+    ${NextAndPrevious}
+  }
+  right: 0;
+`
+
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state= {
       properties: [],
-      favoriteList:['hello1', 'hello2'],
+      favoriteList:[],
       show: false,
+      showSlides:[],
     };
   }
 
-  /*
-  click handler for the heart. should change the css of the heart to toggle fill in and not fill in.
-  post request to mark this favorite as not whatever it is now.
-
-
-  */
   showModal (){
     this.setState({ show: true });
   }
-
   hideModal () {
-    console.log('in hideModal')
     this.setState({ show: false });
   }
   handleHeartClick(e) {
     //console.log(e.target.style.color);
     e.target.style.color = e.target.style.color !== 'red'? 'red': 'rgba(0,0,0,0.4)';
-    console.log(e.target);
+    console.log(e.target.id);
+    let id = +e.target.id;
     // set the state
-    //this.toggleFavoriteStatus();
+    this.toggleFavoriteStatus(id);
   }
-  toggleFavoriteStatus(e) {
-    //use e.target.id
-    console.log('target: ', e.currentTarget.parentNode);
-    // send a post request
-    // axios.post('/favorites')
-    //   .then((response) => {
-    //     console.log(response);
-    //     var parsed = JSON.parse(response.data);
-    //     this.setState({favoriteList: parsed});
-    //   })
-    //   .catch(function (error) {
-    //   console.log('error in get: ', error);
-    // })
+  toggleFavoriteStatus(id) {
+    axios.post('/favorites',{id})
+      .then((response) => {
+        console.log(response);
+        this.getFavorites();
+      })
+      .catch(function (error) {
+      console.log('error in post: ', error);
+    })
   }
   getFavorites() {
     axios.get('/favorites')
@@ -224,14 +289,21 @@ class App extends React.Component {
       console.log('error in get: ', error);
     })
   }
+  numberWithCommas(x, roundToNearest) {
+    x = Math.round(x/roundToNearest)*roundToNearest
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
   componentDidMount() {
     axios.get('/property')
       .then((response) => {
         console.log(response);
         var properties = JSON.parse(response.data);
-        console.log(properties.length);
+        console.log(properties);
         this.setState({properties});
+        axios.post('/resetFavorites').then(response => {
+          console.log('favorites reset!')
+        })
       })
       .catch(function (error) {
       console.log('error in get: ', error);
@@ -239,23 +311,28 @@ class App extends React.Component {
   }
     render() {
         return (
-          <div className="hello">
-            <h3>Similar Homes You May Like</h3>
+          <div>
+            <TitleContainer>
+            <h2 >Similar Homes You May Like</h2>
+            <FavoritesLink onClick={e => {this.showModal();}}>View your favorites list!</FavoritesLink>
+            </TitleContainer>
             <FlexContainer>
               {this.state.properties.length > 0 ? this.state.properties.map((image, index) => (
                 <CellBox key={index}>
                   <ImageDiv>
-                    <Image src={image.imageURL}/><HeartIcon onClick={this.handleHeartClick} className="fas fa-heart"></HeartIcon>
+                    <Image src={image.imageURL}/><HeartIcon id={image.id} onClick={(e) => this.handleHeartClick(e)} className="fas fa-heart"></HeartIcon>
                   </ImageDiv>
                   <DescriptionBox>
-                    <Price>$2,245,000</Price>
-                    <div className="bedBath"><i className="fas fa-bed"></i> 6bd, <i className="fas fa-bath"></i> 6ba, <i className="fas fa-campground"></i> 5846sqft</div>
-                    <div>405 9th St NE</div>
-                    <div>Midtown, Atlanta, GA</div>
+                    <Price>${this.numberWithCommas(image.price, 1000)}</Price>
+                    <div className="bedBath"><i className="fas fa-bed"></i> {image.Beds}bd, <i className="fas fa-bath"></i> {image.Baths}ba, <i className="fas fa-campground"></i> {this.numberWithCommas(image.Sqft, 10)}sqft</div>
+                    <div>{image.streetAddress}</div>
+                    <div>{`${image.city}, ATL, ${image.zipCode}`}</div>
                   </DescriptionBox>
                 </CellBox>
-              )) : ''}
-              {<CellBox key={this.state.properties.length} >
+
+              )) : <div>{''}</div>}
+              {
+                <CellBox key={this.state.properties.length} >
               <ImageDiv >
                 <Neighborhood>
                 <Flag className="far fa-flag"></Flag>
@@ -265,22 +342,20 @@ class App extends React.Component {
                   <TakeALookButton>Take a look</TakeALookButton>
                 </Neighborhood>
               </ImageDiv>
-            </CellBox>}
+            </CellBox>
+            }
+            {/* <i class="fas fa-angle-left"></i> */}
+            <PreviousButton className="fas fa-angle-left"></PreviousButton>
+            {/* <i class="fas fa-angle-right"></i> */}
+
+
+            <NextButton className="fas fa-angle-right"></NextButton>
             </FlexContainer>
-            <FavoritesLink onClick={e => {this.showModal();}}>See your favorites!</FavoritesLink>
-            <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.favoriteList} >
-              {
-                /*
-                maybe a search bar and a list of favorites.
-                */
-              }
-          <p>Modal</p>
-          <p>Data</p>
-        </Modal>
+
+            <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.favoriteList} ></Modal>
           </div>
         )
     }
 }
 
 export default App;
-
