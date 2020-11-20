@@ -17,9 +17,10 @@ const DescriptionBox = styled.div`
 const FlexContainer = styled.div`
 &{
    display: flex;
-   position: relative;
+   //position: relative;
   //  flex-wrap: nowrap;
     overflow-x: auto;
+    right: 100px;
     margin-left: -8px;
     margin-right: -8px;
     margin-top: -16px;
@@ -33,6 +34,25 @@ const FlexContainer = styled.div`
     display: none;
   }
 `;
+const ContentSlider = styled.div`
+position: relative;
+box-sizing: border-box;
+display: block;
+//margin-top: px;
+//overflow-x: auto;
+outline: none;
+//left: 100px;
+margin-left: -8px;
+ margin-right: -8px;
+ //border: solid;
+//padding: 0px;
+// border-width: 16px 8px 0px;
+// flex-shrink: 0;
+// width:224px;
+&::-webkit-scrollbar {
+  display: none;
+}
+`
 
 const CellBox = styled.div`
   display: block;
@@ -213,9 +233,9 @@ const NextAndPrevious = css`
   //min-width: 50px;
   background: #fff;
   color: black;
-  top: 125px;
+  top: 135px;
   border-radius: 50%;
-  font-weight: 600;
+  //font-weight: 600;
   text-align: center;
   cursor: pointer;
   outline: none;
@@ -223,7 +243,7 @@ const NextAndPrevious = css`
   text-align: center;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.01);
     box-shadow: -1px 8px 21px -11px rgba(0,0,0,0.58);
   }
 
@@ -231,7 +251,7 @@ const NextAndPrevious = css`
 const PreviousButton = styled.i`
 
   ${NextAndPrevious}
-  left: 0;
+  left: 0px;
 `
 
 const NextButton = styled.i`
@@ -239,7 +259,7 @@ const NextButton = styled.i`
   &{
     ${NextAndPrevious}
   }
-  right: 0;
+  right: 0px;
 `
 
 
@@ -272,19 +292,29 @@ class App extends React.Component {
     axios.post('/favorites',{id})
       .then((response) => {
         console.log(response);
-        this.getFavorites();
+        this.getFavorites((response) => {
+          console.log(response);
+          var parsed = JSON.parse(response.data);
+          this.setState({favoriteList: parsed});
+        });
       })
       .catch(function (error) {
       console.log('error in post: ', error);
     })
   }
-  getFavorites() {
+  nextButtonHandler(e) {
+    e.target.parentElement.scrollLeft = 99999;
+    //this.setState({showSlides: this.state.properties.slice(3)})
+    // probably need to get from database, and change hearts accordingly
+  }
+  previousButtonHandler(e) {
+    e.target.parentElement.scrollLeft = 0;
+    //this.setState({showSlides: this.state.properties.slice()})
+    // need to get from database, change hearts accordingly. or maybe just from favorites list.
+  }
+  getFavorites(callback) {
     axios.get('/favorites')
-      .then((response) => {
-        console.log(response);
-        var parsed = JSON.parse(response.data);
-        this.setState({favoriteList: parsed});
-      })
+      .then(callback)
       .catch(function (error) {
       console.log('error in get: ', error);
     })
@@ -300,9 +330,9 @@ class App extends React.Component {
         console.log(response);
         var properties = JSON.parse(response.data);
         console.log(properties);
-        this.setState({properties});
+        this.setState({properties, showSlides: properties});
         axios.post('/resetFavorites').then(response => {
-          console.log('favorites reset!')
+          console.log('favorites reset!');
         })
       })
       .catch(function (error) {
@@ -316,8 +346,9 @@ class App extends React.Component {
             <h2 >Similar Homes You May Like</h2>
             <FavoritesLink onClick={e => {this.showModal();}}>View your favorites list!</FavoritesLink>
             </TitleContainer>
+            <ContentSlider>
             <FlexContainer>
-              {this.state.properties.length > 0 ? this.state.properties.map((image, index) => (
+              {this.state.showSlides.length > 0 ? this.state.showSlides.map((image, index) => (
                 <CellBox key={index}>
                   <ImageDiv>
                     <Image src={image.imageURL}/><HeartIcon id={image.id} onClick={(e) => this.handleHeartClick(e)} className="fas fa-heart"></HeartIcon>
@@ -344,14 +375,10 @@ class App extends React.Component {
               </ImageDiv>
             </CellBox>
             }
-            {/* <i class="fas fa-angle-left"></i> */}
-            <PreviousButton className="fas fa-angle-left"></PreviousButton>
-            {/* <i class="fas fa-angle-right"></i> */}
-
-
-            <NextButton className="fas fa-angle-right"></NextButton>
+            <PreviousButton className="fas fa-angle-left" onClick={this.previousButtonHandler.bind(this)}></PreviousButton>
+            <NextButton className="fas fa-angle-right" onClick={this.nextButtonHandler.bind(this)}></NextButton>
             </FlexContainer>
-
+            </ContentSlider>
             <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.favoriteList} ></Modal>
           </div>
         )
@@ -359,3 +386,53 @@ class App extends React.Component {
 }
 
 export default App;
+
+// for (let i = 0; i < next.length; i++) {
+//   //refer elements by class name
+
+//   let position = 0; //slider postion
+
+//   prev[i].addEventListener("click", function() {
+//     //click previos button
+//     if (position > 0) {
+//       //avoid slide left beyond the first item
+//       position -= 1;
+//       translateX(position); //translate items
+//     }
+//   });
+
+//   next[i].addEventListener("click", function() {
+//     if (position >= 0 && position < hiddenItems()) {
+//       //avoid slide right beyond the last item
+//       position += 1;
+//       translateX(position); //translate items
+//     }
+//   });
+// }
+
+// function hiddenItems() {
+//   //get hidden items
+//   let items = getCount(item, false);
+//   let visibleItems = slider.offsetWidth / 210;
+//   return items - Math.ceil(visibleItems);
+// }
+// }
+
+// function translateX(position) {
+// //translate items
+// slide.style.left = position * -210 + "px";
+// }
+
+// function getCount(parent, getChildrensChildren) {
+// //count no of items
+// let relevantChildren = 0;
+// let children = parent.childNodes.length;
+// for (let i = 0; i < children; i++) {
+//   if (parent.childNodes[i].nodeType != 3) {
+//     if (getChildrensChildren)
+//       relevantChildren += getCount(parent.childNodes[i], true);
+//     relevantChildren++;
+//   }
+// }
+// return relevantChildren;
+// }
