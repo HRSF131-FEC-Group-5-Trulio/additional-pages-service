@@ -8,7 +8,28 @@ import Listing from './Listing';
 import LastSlide from './LastSlide';
 //probably will need to import fonts eventually.
 
+const OuterContainer = styled.div`
 
+background: rgb(255, 255, 255);
+margin:    0 auto;
+        max-width: 1000px;
+//position: absolute;
+//border: solid;
+        /* display: flex;
+        justify-content: center;
+        overflow-x: hidden; */
+        /* -webkit-box-pack: center; */
+        /* width: 100%;
+        text-align: center; */
+        line-height: 1.5;
+        display: block;
+        font-size: 16px;
+        letter-spacing: -0.1px;
+        font-family: TruliaSans, system, -apple-system, Roboto, "Segoe UI Bold", Arial, sans-serif;
+        & i{
+          color: gray;
+        }
+`
 const FlexContainer = styled.div`
 &{
    display: flex;
@@ -76,17 +97,6 @@ const TitleContainer = styled.div`
   position: relative;
   width: 100%;
 `
-const Item = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-height: 250px;
-width: 100%;
-background-color: #683bb7;
-color: #fff;
-margin: 15px;
-font-size: 4em;
-`
 
 const NextAndPrevious = css`
   border: 1px solid rgb(232, 233, 234);
@@ -113,16 +123,12 @@ const NextAndPrevious = css`
 
 `
 const PreviousButton = styled.i`
-
   ${NextAndPrevious}
   left: 0px;
 `
 
 const NextButton = styled.i`
-
-  &{
-    ${NextAndPrevious}
-  }
+  ${NextAndPrevious}
   right: 0px;
 `
 
@@ -136,6 +142,8 @@ class App extends React.Component {
       show: false,
       showSlides:[],
       scrollPosition: 0,
+      displayLeftArrow: false,
+      displayRightArrow: true
     };
   }
 
@@ -229,7 +237,7 @@ class App extends React.Component {
   }
     render() {
         return (
-          <div>
+          <OuterContainer>
             <TitleContainer>
             <h2 >Similar Homes You May Like</h2>
             <FavoritesLink onClick={e => {this.showModal();}}>View your favorites list!</FavoritesLink>
@@ -239,67 +247,16 @@ class App extends React.Component {
               {this.state.showSlides.length > 0 ? this.state.showSlides.map((image, index) => (
                 <Listing image={image} handleHeartClick= {this.handleHeartClick.bind(this)} index={index} numberWithCommas = {this.numberWithCommas}/>
               )) : <div>{''}</div>}
-              {
-                <LastSlide key={this.state.properties.length}/>
-              }
+              {<LastSlide key={this.state.properties.length}/>}
             <PreviousButton className="fas fa-angle-left" onClick={this.previousButtonHandler.bind(this)}style={{display: this.state.scrollPosition === 0 ? 'none':'block'}}></PreviousButton>
             <NextButton className="fas fa-angle-right" onClick={this.nextButtonHandler.bind(this)}></NextButton>
             </FlexContainer>
             </ContentSlider>
             <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.favoriteList} ></Modal>
-          </div>
+          </OuterContainer>
         )
     }
 }
 
 export default App;
 
-// for (let i = 0; i < next.length; i++) {
-//   //refer elements by class name
-
-//   let position = 0; //slider postion
-
-//   prev[i].addEventListener("click", function() {
-//     //click previos button
-//     if (position > 0) {
-//       //avoid slide left beyond the first item
-//       position -= 1;
-//       translateX(position); //translate items
-//     }
-//   });
-
-//   next[i].addEventListener("click", function() {
-//     if (position >= 0 && position < hiddenItems()) {
-//       //avoid slide right beyond the last item
-//       position += 1;
-//       translateX(position); //translate items
-//     }
-//   });
-// }
-
-// function hiddenItems() {
-//   //get hidden items
-//   let items = getCount(item, false);
-//   let visibleItems = slider.offsetWidth / 210;
-//   return items - Math.ceil(visibleItems);
-// }
-// }
-
-// function translateX(position) {
-// //translate items
-// slide.style.left = position * -210 + "px";
-// }
-
-// function getCount(parent, getChildrensChildren) {
-// //count no of items
-// let relevantChildren = 0;
-// let children = parent.childNodes.length;
-// for (let i = 0; i < children; i++) {
-//   if (parent.childNodes[i].nodeType != 3) {
-//     if (getChildrensChildren)
-//       relevantChildren += getCount(parent.childNodes[i], true);
-//     relevantChildren++;
-//   }
-// }
-// return relevantChildren;
-// }

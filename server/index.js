@@ -7,8 +7,8 @@ var bodyParser = require('body-parser')
 app.use(express.static(path.join(__dirname,'../public')));
 app.use(bodyParser.json());
 
-app.listen(3001);
-console.log('listening at port 3001');
+app.listen(3003);
+console.log('listening at port 3003');
 
 app.get('/api/property', (req, res) => {
   db.fetch((err, data) => {

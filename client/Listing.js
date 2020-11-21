@@ -57,7 +57,7 @@ const DescriptionBox = styled.div`
 `;
 
 const HeartIcon = styled.i`
-  position: absolute;
+  &&{position: absolute;
   font-size: 25px;
   top: 0;
   right: 0;
@@ -66,6 +66,7 @@ const HeartIcon = styled.i`
   color: rgba(0,0,0,0.4);
   -webkit-text-stroke-width: 3px;
   -webkit-text-stroke-color: white;
+  }
   // &:hover{
   //   color: red;
   // }

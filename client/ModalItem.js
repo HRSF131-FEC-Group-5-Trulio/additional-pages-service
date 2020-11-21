@@ -4,30 +4,36 @@ import styled, {css} from 'styled-components';
 
 const FavoriteContainer = styled.div`
   position: relative;
-  border: solid;
-  border-radius: 8px;
-  // &.x{
-  //   cursor: pointer;
-  //   position: absolute;
-  //   top: 50%;
-  //   right: 0%;
-  //   padding: 12px 16px;
-  //   transform: translate(0%, -50%);
-  // }
+  border: solid green;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  background: rgb(204, 255, 204);
+  height: 70px;
+  //height: 100%
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  &:hover {
+    border-color: red;
+  }
+
+
 `
 const FavoriteImage = styled.img`
-  height: 30px;
-  width: 30px;
+  height: 75px;
+  width: 75px;
   float: left;
   line-height: 50px;
   border-radius: 10px;
-  border: solid green;
+  //border: solid green;
   position: absolute;
 `
 const AddressAndPriceContainer = styled.div`
 //position: absolute;
-border: solid red;
-margin-left: 30px;
+//border: solid;
+margin-left: 80px;
 //padding-left: 30px;
 //margin: 10px 5px;
 `
@@ -35,7 +41,7 @@ const Price = styled.div`
 
 `
 const Address = styled.div`
-
+ font-weight: bold;
 `
 var ModalItem = function({favorite, numberWithCommas}) {
   return (
