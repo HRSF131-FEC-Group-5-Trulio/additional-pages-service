@@ -1,7 +1,9 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import styled, {css} from 'styled-components';
-import SearchBar from './SearchBar'
+import SearchBar from './SearchBar';
+import ModalItem from './ModalItem.js';
+
 const StyledModal = styled.div`
 &.modal {
   position: fixed;
@@ -97,13 +99,6 @@ const FavoritesContainer = styled.div`
    //top: 75px;
   // left: 75px;
 `
-const FavoriteImage = styled.img`
-  height: 30px;
-  width: 30px;
-`
-const FavoriteContainer = styled.div`
-
-`
 
 //Add a shadow??
 class Modal extends React.Component {
@@ -128,11 +123,7 @@ class Modal extends React.Component {
           <SearchBar/>
           <FavoritesContainer>
             {this.props.favorites.map(favorite=> {return (
-              <FavoriteContainer>
-                <FavoriteImage src={favorite.imageURL}></FavoriteImage>
-                <div key={favorite.id}>{`${favorite.streetAddress}, ${favorite.city}, ATL, ${favorite.zipCode}`}</div>
-                <div>${this.numberWithCommas(favorite.price, 1000)}</div>
-              </FavoriteContainer>
+              <ModalItem favorite={favorite} numberWithCommas={this.numberWithCommas.bind()} />
             )}
             )}
           </FavoritesContainer>
