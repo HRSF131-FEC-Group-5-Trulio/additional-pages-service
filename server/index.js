@@ -7,10 +7,10 @@ var bodyParser = require('body-parser')
 app.use(express.static(path.join(__dirname,'../public')));
 app.use(bodyParser.json());
 
-app.listen(3000);
-console.log('listening at port 3000');
+app.listen(3003);
+console.log('listening at port 3003');
 
-app.get('/property', (req, res) => {
+app.get('/api/property', (req, res) => {
   db.fetch((err, data) => {
     if(err) {
       console.log('error in getproperty: ', err);
@@ -25,7 +25,7 @@ app.get('/property', (req, res) => {
 });
 
 // app.post to /favorites,
-app.post('/favorites', (req, res) => {
+app.post('/api/favorites', (req, res) => {
   // get the id sent in somehow.
   db.post(req.body.id, (err, data) => {
     if(err) {
@@ -36,7 +36,7 @@ app.post('/favorites', (req, res) => {
   })
 });
 
-app.get('/favorites', (req,res) => {
+app.get('/api/favorites', (req,res) => {
   db.getAllFavorites((err, data) => {
     if(err) {
       console.log('error in get: ', err);
@@ -45,7 +45,7 @@ app.get('/favorites', (req,res) => {
     res.json(JSON.stringify(data));
   })
 });
-app.post('/resetFavorites', (req, res) => {
+app.post('/api/resetFavorites', (req, res) => {
   db.resetFavorites((err, data) => {
     if(err) {
       console.log('error resetting!!', err);

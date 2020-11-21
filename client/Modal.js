@@ -1,7 +1,9 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import styled, {css} from 'styled-components';
-import SearchBar from './SearchBar'
+import SearchBar from './SearchBar';
+import ModalItem from './ModalItem.js';
+
 const StyledModal = styled.div`
 &.modal {
   position: fixed;
@@ -16,7 +18,7 @@ const StyledModal = styled.div`
     // flex-direction: vertical
     // justify-content: center;
     position:fixed;
-    background: white;
+    //background: white;
     width: 45%;
     height: 80%;
     top:50%;
@@ -25,6 +27,7 @@ const StyledModal = styled.div`
     border-radius: 20px;
     border: solid;
     border-color: green;
+    background: rgb(204, 255, 204);
   }
   &.display-block {
     display: flex;
@@ -84,25 +87,20 @@ const FavoritesContainer = styled.div`
   // position: absolute;
   text-align: left;
   top:50%;
-   border: solid;
+   border: solid green;
+   border-radius: 8px;
    height: 85%;
    width: 70%;
    margin-top: 20px;
    margin-left: auto;
    margin-right: auto;
+   background: white;
   //  display:inline-block;
    //float: left;
    //padding-top: 75px;
   // align-items: center;
    //top: 75px;
   // left: 75px;
-`
-const FavoriteImage = styled.img`
-  height: 30px;
-  width: 30px;
-`
-const FavoriteContainer = styled.div`
-
 `
 
 //Add a shadow??
@@ -127,12 +125,8 @@ class Modal extends React.Component {
         <CloseButton href="#" className="close" onClick={this.props.handleClose}/>
           <SearchBar/>
           <FavoritesContainer>
-            {this.props.favorites.map(favorite=> {return (
-              <FavoriteContainer>
-                <FavoriteImage src={favorite.imageURL}></FavoriteImage>
-                <div key={favorite.id}>{`${favorite.streetAddress}, ${favorite.city}, ATL, ${favorite.zipCode}`}</div>
-                <div>${this.numberWithCommas(favorite.price, 1000)}</div>
-              </FavoriteContainer>
+            {this.props.favorites.length === 0? 'No items selected.' : this.props.favorites.map(favorite=> {return (
+              <ModalItem favorite={favorite} numberWithCommas={this.numberWithCommas.bind()} />
             )}
             )}
           </FavoritesContainer>
