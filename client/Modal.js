@@ -108,7 +108,10 @@ const FavoritesContainer = styled.div`
 class Modal extends React.Component {
   constructor(props) {
     super(props);
-
+    this.state= {
+      favorites:[],
+      show: false,
+    }
   }
   numberWithCommas(x, roundToNearest) {
     x = Math.round(x/roundToNearest)*roundToNearest
@@ -124,7 +127,7 @@ class Modal extends React.Component {
       <StyledModal className={showHideClassName} onClick={this.props.handleClose}>
         <section className='modal-main'  onClick={this.stopPropagation}>
         <CloseButton href="#" className="close" onClick={this.props.handleClose}/>
-          <SearchBar/>
+          {this.props.children}
           <FavoritesContainer>
             {this.props.favorites.length === 0? 'No items selected.' : this.props.favorites.map(favorite=> {return (
               <ModalItem favorite={favorite} numberWithCommas={this.numberWithCommas.bind()} />

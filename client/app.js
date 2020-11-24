@@ -6,6 +6,7 @@ import Modal from './Modal';
 import axios from 'axios';
 import Listing from './Listing';
 import LastSlide from './LastSlide';
+import SearchBar from './SearchBar';
 //probably will need to import fonts eventually.
 
 const OuterContainer = styled.div`
@@ -132,19 +133,21 @@ const NextButton = styled.i`
   right: 0px;
 `
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state= {
       properties: [],
       favoriteList:[],
+      displayedFavorites:[],
       show: false,
       showSlides:[],
       scrollPosition: 0,
       displayLeftArrow: false,
       displayRightArrow: true
     };
+    this.arrowButtonHandler = this.arrowButtonHandler.bind(this);
+    this.onChangeHandler = this.onChangeHandler.bind(this);
   }
 
   showModal(){
@@ -154,41 +157,31 @@ class App extends React.Component {
     this.setState({ show: false });
   }
   handleHeartClick(e) {
-    //console.log(e.target.style.color);
     e.target.style.color = e.target.style.color !== 'red'? 'red': 'rgba(0,0,0,0.4)';
-    console.log(e.target.id);
     let id = +e.target.id;
-    // set the state
     this.toggleFavoriteStatus(id);
   }
   toggleFavoriteStatus(id) {
     axios.post('/api/favorites',{id})
       .then((response) => {
-        console.log(response);
         this.getFavorites((response) => {
-          console.log(response);
-          var parsed = JSON.parse(response.data);
-          this.setState({favoriteList: parsed});
+          var favorites = JSON.parse(response.data);
+          this.setState({
+            favoriteList: favorites,
+            displayedFavorites: favorites,
+          });
         });
       })
       .catch(function (error) {
       console.log('error in post: ', error);
     })
   }
-  nextButtonHandler(e) {
-    console.log(e.target.parentElement.children);
-    e.target.parentElement.scrollLeft += 200;
-    var maxScrollLeft = e.target.parentElement.scrollWidth - e.target.parentElement.clientWidth;
-  }
-  previousButtonHandler(e) {
-    console.log(e.target.parentElement.scrollLeft)
-    e.target.parentElement.scrollLeft -= 200;
+  arrowButtonHandler(e, dir) {
+    e.target.parentElement.scrollLeft += (200 * dir);
   }
   handleScroll(e) {
-    console.log('scroll position: ',e.target.scrollLeft)
     var scrollPosition = e.target.scrollLeft;
     var maxScrollLeft = e.target.scrollWidth - e.target.parentElement.clientWidth;
-    console.log('max: ', maxScrollLeft)
     if(scrollPosition === 0) {
       this.setState({displayLeftArrow: false});
     } else if(scrollPosition ===maxScrollLeft-10) {
@@ -204,11 +197,24 @@ class App extends React.Component {
       console.log('error in get: ', error);
     })
   }
-  numberWithCommas(x, roundToNearest) {
-    x = Math.round(x/roundToNearest)*roundToNearest
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  setKeyword(e) {
+    console.log('in setKeyword: ',e.target.value)
   }
-
+  onChangeHandler(e) {
+    //filter .includes
+    var query = e.target.value.toLowerCase();
+    var filtered = this.state.favoriteList.filter(favorite =>
+      `${favorite.streetAddress}, ${favorite.city}, ${favorite.state}, ${favorite.zipCode}`.toLowerCase().includes(query)
+      );
+    this.setState({
+      displayedFavorites: filtered,
+    })
+  }
+  getHighlightedText(text, highlight) {
+    // Split text on highlight term, include term itself into parts, ignore case
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+    return <span>{parts.map(part => part.toLowerCase() === highlight.toLowerCase() ? <b>{part}</b> : part)}</span>;
+}
   componentDidMount() {
     axios.get('/api/property')
       .then((response) => {
@@ -217,7 +223,7 @@ class App extends React.Component {
         console.log(properties);
         this.setState({properties, showSlides: properties});
         axios.post('/api/resetFavorites').then(response => {
-          console.log('favorites reset!', 'also, left arrow: ', this.state.displayLeftArrow);
+          // console.log('favorites reset!', 'also, left arrow: ', this.state.displayLeftArrow);
         })
       })
       .catch(function (error) {
@@ -225,23 +231,26 @@ class App extends React.Component {
     })
   }
     render() {
+      console.log('here is state: ',this.state)
         return (
           <OuterContainer>
             <TitleContainer>
             <h2 >Similar Homes You May Like</h2>
-            <FavoritesLink onClick={e => {this.showModal();}}>View your favorites list!</FavoritesLink>
+              <FavoritesLink onClick={e => {this.showModal();}}>View your favorites list!</FavoritesLink>
             </TitleContainer>
             <ContentSlider onScroll={this.handleScroll.bind(this)}>
-            <FlexContainer>
+              <FlexContainer>
               {this.state.showSlides.length > 0 ? this.state.showSlides.map((image, index) => (
-                <Listing image={image} handleHeartClick= {this.handleHeartClick.bind(this)} index={index} numberWithCommas = {this.numberWithCommas}/>
+                <Listing image={image} handleHeartClick= {this.handleHeartClick.bind(this)} index={index}/>
               )) : <div>{''}</div>}
               {<LastSlide key={this.state.properties.length}/>}
-            <PreviousButton className="fas fa-angle-left" onClick={this.previousButtonHandler.bind(this)} style={{visibility: this.state.displayLeftArrow ? 'visible':'hidden'}}></PreviousButton>
-            <NextButton className="fas fa-angle-right" onClick={this.nextButtonHandler.bind(this)} style={{visibility: this.state.displayRightArrow ? 'visible':'hidden'}}></NextButton>
-            </FlexContainer>
+                <PreviousButton className="fas fa-angle-left" onClick={(e) => this.arrowButtonHandler.call(this, e, -1 )} style={{visibility: this.state.displayLeftArrow ? 'visible':'hidden'}}></PreviousButton>
+                <NextButton className="fas fa-angle-right" onClick={(e) => this.arrowButtonHandler.call(this, e, 1 )} style={{visibility: this.state.displayRightArrow ? 'visible':'hidden'}}></NextButton>
+              </FlexContainer>
             </ContentSlider>
-            <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.favoriteList} ></Modal>
+            <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.displayedFavorites}>
+              {<SearchBar favoriteList={this.state.favoriteList} onChangeHandler={(e) =>this.onChangeHandler(e)}/>}
+            </Modal>
           </OuterContainer>
         )
     }

@@ -19,16 +19,28 @@ background:#F2F1F9;
   //width: 80%;
 background: white;
 `
+class SearchBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      query: '',
+    }
+  }
+  changeHandler(e) {
+    this.setState({query: e.target.value});
+    this.props.onChangeHandler(e);
+  }
 
-const SearchBar = ({keyword,setKeyword}) => {
-  return (
-    <Search
-     key="random1"
-     value={keyword}
-     placeholder={"Search Favorites"}
-     onChange={(e) => setKeyword(e.target.value)}
-    />
-  );
+  render() {
+    return (
+      <Search
+      key="random1"
+      value={this.state.query}
+      placeholder={"Search Favorites"}
+      onChange={this.changeHandler.bind(this)}
+      />
+    );
+  }
 }
 
 export default SearchBar
