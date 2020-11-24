@@ -1,7 +1,7 @@
-const getData = require('./getData.js')
 const mongoose = require('mongoose');
 const faker = require('faker');
-mongoose.connect('mongodb://localhost/realestate', {useNewUrlParser: true}).catch((err) => {
+const uri = process.env.MONGODB_URI ? process.env.MONGODB_URI : 'mongodb://localhost/realestate';
+mongoose.connect(uri, {useNewUrlParser: true}).catch((err) => {
   if(err) {
     console.log('error connecting! ', err);
   }

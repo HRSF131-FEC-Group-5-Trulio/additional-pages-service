@@ -85,7 +85,11 @@ const Price = styled.div`
   //   outline: none;
 `
 
-var Listing = ({image, handleHeartClick, index, numberWithCommas}) => {
+var Listing = ({image, handleHeartClick, index}) => {
+  function numberWithCommas(x, roundToNearest) {
+    x = Math.round(x/roundToNearest)*roundToNearest
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   return (
     <CellBox key={index}>
       <ImageDiv>
