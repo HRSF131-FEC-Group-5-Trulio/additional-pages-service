@@ -95,6 +95,7 @@ const FavoritesContainer = styled.div`
    margin-left: auto;
    margin-right: auto;
    background: white;
+   overflow-y: auto;
   //  display:inline-block;
    //float: left;
    //padding-top: 75px;

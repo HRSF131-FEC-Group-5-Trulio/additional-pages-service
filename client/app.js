@@ -179,34 +179,23 @@ class App extends React.Component {
     console.log(e.target.parentElement.children);
     e.target.parentElement.scrollLeft += 200;
     var maxScrollLeft = e.target.parentElement.scrollWidth - e.target.parentElement.clientWidth;
-    // if(e.target.parentElement.display === 'none') {
-    //   e.target.parentElement.display = 'block';
-    // }
-    if(e.target.parentElement.scrollLeft===maxScrollLeft) {
-      e.target.style.display = 'none';
-      console.log('right side reached!');
-    }
-
-    //check scrollLeft = max
-
-    //this.setState({showSlides: this.state.properties.slice(3)})
-    // probably need to get from database, and change hearts accordingly
   }
   previousButtonHandler(e) {
     console.log(e.target.parentElement.scrollLeft)
     e.target.parentElement.scrollLeft -= 200;
-    //check scrollLeft equals zero
-    // have a scrollposition state?
-    // if(e.target.parentElement.scrollLeft===0) {
-    //   console.log(e.target.style.display);
-    //   e.target.style.display = 'block';
-    //   console.log('left side reached!');
-    // }
-    this.setState({scrollPosition: e.target.parentElement.scrollLeft})
-
-
-    //this.setState({showSlides: this.state.properties.slice()})
-    // need to get from database, change hearts accordingly. or maybe just from favorites list.
+  }
+  handleScroll(e) {
+    console.log('scroll position: ',e.target.scrollLeft)
+    var scrollPosition = e.target.scrollLeft;
+    var maxScrollLeft = e.target.scrollWidth - e.target.parentElement.clientWidth;
+    console.log('max: ', maxScrollLeft)
+    if(scrollPosition === 0) {
+      this.setState({displayLeftArrow: false});
+    } else if(scrollPosition ===maxScrollLeft-10) {
+      this.setState({displayRightArrow: false});
+    } else {
+      this.setState({displayLeftArrow: true, displayRightArrow: true});
+    }
   }
   getFavorites(callback) {
     axios.get('/api/favorites')
@@ -228,7 +217,7 @@ class App extends React.Component {
         console.log(properties);
         this.setState({properties, showSlides: properties});
         axios.post('/api/resetFavorites').then(response => {
-          console.log('favorites reset!');
+          console.log('favorites reset!', 'also, left arrow: ', this.state.displayLeftArrow);
         })
       })
       .catch(function (error) {
@@ -242,14 +231,14 @@ class App extends React.Component {
             <h2 >Similar Homes You May Like</h2>
             <FavoritesLink onClick={e => {this.showModal();}}>View your favorites list!</FavoritesLink>
             </TitleContainer>
-            <ContentSlider>
+            <ContentSlider onScroll={this.handleScroll.bind(this)}>
             <FlexContainer>
               {this.state.showSlides.length > 0 ? this.state.showSlides.map((image, index) => (
                 <Listing image={image} handleHeartClick= {this.handleHeartClick.bind(this)} index={index} numberWithCommas = {this.numberWithCommas}/>
               )) : <div>{''}</div>}
               {<LastSlide key={this.state.properties.length}/>}
-            <PreviousButton className="fas fa-angle-left" onClick={this.previousButtonHandler.bind(this)}style={{display: this.state.scrollPosition === 0 ? 'none':'block'}}></PreviousButton>
-            <NextButton className="fas fa-angle-right" onClick={this.nextButtonHandler.bind(this)}></NextButton>
+            <PreviousButton className="fas fa-angle-left" onClick={this.previousButtonHandler.bind(this)} style={{visibility: this.state.displayLeftArrow ? 'visible':'hidden'}}></PreviousButton>
+            <NextButton className="fas fa-angle-right" onClick={this.nextButtonHandler.bind(this)} style={{visibility: this.state.displayRightArrow ? 'visible':'hidden'}}></NextButton>
             </FlexContainer>
             </ContentSlider>
             <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.favoriteList} ></Modal>

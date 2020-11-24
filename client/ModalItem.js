@@ -9,7 +9,7 @@ const FavoriteContainer = styled.div`
   display: flex;
   align-items: center;
   background: rgb(204, 255, 204);
-  height: 70px;
+  min-height: 70px;
   //height: 100%
   overflow-y: auto;
   &::-webkit-scrollbar {
