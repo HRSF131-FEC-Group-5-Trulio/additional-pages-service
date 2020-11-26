@@ -10,10 +10,7 @@ const CellBox = styled.div`
   border-width: 16px 8px 0px;
   box-sizing: border-box;
   line-height: 24px;
-  //display: block;
   flex-shrink: 0;
-  //flex-basis: auto;
-  // min-width: 224px;
   width:224px;
   `;
   const ImageDiv = styled.div`
@@ -23,9 +20,7 @@ const CellBox = styled.div`
   border-radius: 8px;
   border: solid;
   border-color: transparent;
-  // //display: flex;
    position: relative;
-  // z-index: 0;
    height: 160px;
    overflow:hidden;
 }
@@ -37,16 +32,13 @@ const CellBox = styled.div`
 const Neighborhood = styled.div`
   display: block;
   flex-direction: column;
-  //align-items: center;
   background: rgb(232, 233, 234);
   width: 100%;
   height: 100%;
   border-radius: 8px;
   border: solid;
-  //border-width: 0px 16px 0px;
   border-color: transparent;
   white-space: nowrap;
-  //text-overflow: ellipsis;
   padding: 8px;
   box-sizing: border-box;
 `
@@ -99,7 +91,7 @@ const LastSlide = function({key}) {
         <Neighborhood>
         <Flag className="far fa-flag"></Flag>
           <NeightborhoodDescription>See more Homes for Sale in<br/>
-          <NeighborhoodName>Atlanta</NeighborhoodName>
+          <NeighborhoodName>California</NeighborhoodName>
           </NeightborhoodDescription>
           <TakeALookButton>Take a look</TakeALookButton>
         </Neighborhood>

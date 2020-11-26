@@ -14,11 +14,7 @@ const StyledModal = styled.div`
   background: rgba(0, 0, 0, 0.6);
 
   & .modal-main {
-    // display:flex;
-    // flex-direction: vertical
-    // justify-content: center;
     position:fixed;
-    //background: white;
     width: 45%;
     height: 80%;
     top:50%;
@@ -31,9 +27,7 @@ const StyledModal = styled.div`
   }
   &.display-block {
     display: flex;
-    //flex-direction: column;
     justify-content: center;
-    //width: 100%;
     text-align:center;
 
   }
@@ -43,29 +37,23 @@ const StyledModal = styled.div`
 }
 `
 const sharedStyle = css`
-//color: white;
 position: absolute;
-//left: 15px;
 content: '';
 height: 33px;
 width: 2px;
 background-color: #333;
 float: left;
-//margin-right: 10px;
 `
 const CloseButton = styled.a`
 &.close {
-  //color: white;
   position: absolute;
   left: 0%;
   top: 0%;
   float: left;
   width: 5%;
   height: 5%;
-  //border: solid;
   padding-top: 5px;
   padding-left: 20px;
-  //opacity: 0.3;
 }
 &.close:hover {
   opacity: 1;
@@ -84,7 +72,6 @@ const CloseButton = styled.a`
 }
 `
 const FavoritesContainer = styled.div`
-  // position: absolute;
   text-align: left;
   top:50%;
    border: solid green;
@@ -96,27 +83,23 @@ const FavoritesContainer = styled.div`
    margin-right: auto;
    background: white;
    overflow-y: auto;
-  //  display:inline-block;
-   //float: left;
-   //padding-top: 75px;
-  // align-items: center;
-   //top: 75px;
-  // left: 75px;
 `
 
 //Add a shadow??
 class Modal extends React.Component {
   constructor(props) {
     super(props);
-    this.state= {
-      favorites:[],
-      show: false,
-    }
+
   }
   numberWithCommas(x, roundToNearest) {
     x = Math.round(x/roundToNearest)*roundToNearest
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
+  getHighlightedText(text, highlight) {
+    // Split text on highlight term, include term itself into parts, ignore case
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+    return <span>{parts.map(part => part.toLowerCase() === highlight.toLowerCase() ? <b>{part}</b> : part)}</span>;
+}
   stopPropagation(e) {
     e.stopPropagation();
   }
