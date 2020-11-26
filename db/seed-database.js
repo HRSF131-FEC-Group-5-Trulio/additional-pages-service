@@ -59,7 +59,7 @@ function createRecord(id) {
     price: 1000000 + Math.floor(Math.random() * 5000000),
     streetAddress: faker.address.streetAddress(),
     city: faker.address.city(),
-    state: 'Atlanta',
+    state: 'California',
     zipCode: faker.address.zipCode(),
     Beds: 2 + Math.floor(Math.random() * 3),
     Baths: 2 + Math.floor(Math.random() * 1),
@@ -109,7 +109,7 @@ var post = function(id, callback) {
     //var reset = false;
     var toggle = !data.favorites;
     Property.updateOne({id}, {favorites: toggle}, () =>{
-      console.log('after: ', data);
+      //console.log('after: ', data);
       callback();
     })
 

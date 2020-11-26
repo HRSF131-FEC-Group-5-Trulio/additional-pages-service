@@ -10,18 +10,9 @@ import SearchBar from './SearchBar';
 //probably will need to import fonts eventually.
 
 const OuterContainer = styled.div`
-
 background: rgb(255, 255, 255);
 margin:    0 auto;
         max-width: 1000px;
-//position: absolute;
-//border: solid;
-        /* display: flex;
-        justify-content: center;
-        overflow-x: hidden; */
-        /* -webkit-box-pack: center; */
-        /* width: 100%;
-        text-align: center; */
         line-height: 1.5;
         display: block;
         font-size: 16px;
@@ -34,18 +25,12 @@ margin:    0 auto;
 const FlexContainer = styled.div`
 &{
    display: flex;
-   //position: relative;
-  //  flex-wrap: nowrap;
     overflow-x: auto;
     right: 100px;
     margin-left: -8px;
     margin-right: -8px;
-   // margin-top: -16px;
     border: solid;
-    //width: 500px;
-    //height: 200px;
     border-color: transparent;
-    // background-color: black;
  }
  &::-webkit-scrollbar {
     display: none;
@@ -55,24 +40,15 @@ const ContentSlider = styled.div`
 position: relative;
 box-sizing: border-box;
 display: block;
-//margin-top: px;
-//overflow-x: auto;
 outline: none;
-//left: 100px;
 margin-left: -8px;
  margin-right: -8px;
- //border: solid;
-//padding: 0px;
-// border-width: 16px 8px 0px;
-// flex-shrink: 0;
-// width:224px;
 &::-webkit-scrollbar {
   display: none;
 }
 `
 
 const FavoritesLink = styled.button`
-  //float: right;
   right: 0;
   bottom: 0;
   display: inline-block;
@@ -104,13 +80,10 @@ const NextAndPrevious = css`
   position: absolute;
    width: 30px;
    height: 30px;
-  //padding: 10px 10px 10px 10px;
-  //min-width: 50px;
   background: #fff;
   color: black;
   top: 135px;
   border-radius: 50%;
-  //font-weight: 600;
   text-align: center;
   cursor: pointer;
   outline: none;
@@ -148,6 +121,7 @@ class App extends React.Component {
     };
     this.arrowButtonHandler = this.arrowButtonHandler.bind(this);
     this.onChangeHandler = this.onChangeHandler.bind(this);
+
   }
 
   showModal(){
@@ -162,10 +136,11 @@ class App extends React.Component {
     this.toggleFavoriteStatus(id);
   }
   toggleFavoriteStatus(id) {
-    axios.post('/api/favorites',{id})
+    axios.post(`/api/AdditionalListings/${id}/favorites`)
       .then((response) => {
         this.getFavorites((response) => {
           var favorites = JSON.parse(response.data);
+          console.log('got favorites!: ',favorites)
           this.setState({
             favoriteList: favorites,
             displayedFavorites: favorites,
@@ -191,7 +166,7 @@ class App extends React.Component {
     }
   }
   getFavorites(callback) {
-    axios.get('/api/favorites')
+    axios.get(`/api/AdditionalListings/favorites`)
       .then(callback)
       .catch(function (error) {
       console.log('error in get: ', error);
@@ -203,26 +178,24 @@ class App extends React.Component {
   onChangeHandler(e) {
     //filter .includes
     var query = e.target.value.toLowerCase();
-    var filtered = this.state.favoriteList.filter(favorite =>
-      `${favorite.streetAddress}, ${favorite.city}, ${favorite.state}, ${favorite.zipCode}`.toLowerCase().includes(query)
-      );
+    var filtered = this.state.favoriteList.filter(favorite => {
+      var address = `${favorite.streetAddress}, ${favorite.city}, ${favorite.state}, ${favorite.zipCode}`
+      return address.toLowerCase().includes(query)
+      });
     this.setState({
       displayedFavorites: filtered,
     })
   }
-  getHighlightedText(text, highlight) {
-    // Split text on highlight term, include term itself into parts, ignore case
-    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-    return <span>{parts.map(part => part.toLowerCase() === highlight.toLowerCase() ? <b>{part}</b> : part)}</span>;
-}
+
   componentDidMount() {
-    axios.get('/api/property')
+    //pass in the props.id to the api call
+    axios.get(`/api/AdditionalListings/${this.props.id}/property`)
       .then((response) => {
         console.log(response);
         var properties = JSON.parse(response.data);
         console.log(properties);
         this.setState({properties, showSlides: properties});
-        axios.post('/api/resetFavorites').then(response => {
+        axios.post(`/api/additionalListings/resetFavorites`).then(response => {
           // console.log('favorites reset!', 'also, left arrow: ', this.state.displayLeftArrow);
         })
       })
@@ -231,7 +204,16 @@ class App extends React.Component {
     })
   }
     render() {
-      console.log('here is state: ',this.state)
+      //console.log('here is state: ',this.state)
+      const {
+        showSlides,
+        properties,
+        displayLeftArrow,
+        displayRightArrow,
+        show,
+        displayedFavorites,
+        favoriteList
+      } = this.state;
         return (
           <OuterContainer>
             <TitleContainer>
@@ -240,16 +222,16 @@ class App extends React.Component {
             </TitleContainer>
             <ContentSlider onScroll={this.handleScroll.bind(this)}>
               <FlexContainer>
-              {this.state.showSlides.length > 0 ? this.state.showSlides.map((image, index) => (
+              {showSlides.length > 0 ? showSlides.map((image, index) => (
                 <Listing image={image} handleHeartClick= {this.handleHeartClick.bind(this)} index={index}/>
               )) : <div>{''}</div>}
-              {<LastSlide key={this.state.properties.length}/>}
-                <PreviousButton className="fas fa-angle-left" onClick={(e) => this.arrowButtonHandler.call(this, e, -1 )} style={{visibility: this.state.displayLeftArrow ? 'visible':'hidden'}}></PreviousButton>
-                <NextButton className="fas fa-angle-right" onClick={(e) => this.arrowButtonHandler.call(this, e, 1 )} style={{visibility: this.state.displayRightArrow ? 'visible':'hidden'}}></NextButton>
+              {<LastSlide key={properties.length}/>}
+                <PreviousButton className="fas fa-angle-left" onClick={(e) => this.arrowButtonHandler.call(this, e, -1 )} style={{visibility: displayLeftArrow ? 'visible':'hidden'}}></PreviousButton>
+                <NextButton className="fas fa-angle-right" onClick={(e) => this.arrowButtonHandler.call(this, e, 1 )} style={{visibility: displayRightArrow ? 'visible':'hidden'}}></NextButton>
               </FlexContainer>
             </ContentSlider>
-            <Modal show={this.state.show} handleClose={this.hideModal.bind(this)} favorites={this.state.displayedFavorites}>
-              {<SearchBar favoriteList={this.state.favoriteList} onChangeHandler={(e) =>this.onChangeHandler(e)}/>}
+            <Modal show={show} handleClose={this.hideModal.bind(this)} favorites={displayedFavorites}>
+              {<SearchBar favoriteList={favoriteList} onChangeHandler={(e) =>this.onChangeHandler(e)}/>}
             </Modal>
           </OuterContainer>
         )
