@@ -64,10 +64,15 @@ var Listing = ({image, handleHeartClick, index}) => {
     x = Math.round(x/roundToNearest)*roundToNearest
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
+  function clickHandler(e, id) {
+    var imageLocation= window.location.href.split('/');
+    imageLocation[imageLocation.length - 2] = (''+ id).padStart(2,'0');
+    location.assign(imageLocation.join('/'));
+  }
   return (
     <CellBox key={index}>
       <ImageDiv>
-        <Image src={image.imageURL}/><HeartIcon id={image.id} onClick={(e) => handleHeartClick(e)} className="fas fa-heart"></HeartIcon>
+        <Image src={image.imageURL} onClick={(e) => clickHandler(e,image.id)}/><HeartIcon id={image.id} onClick={(e) => handleHeartClick(e)} className="fas fa-heart"></HeartIcon>
       </ImageDiv>
       <DescriptionBox>
         <Price>${numberWithCommas(image.price, 1000)}</Price>
