@@ -82,8 +82,6 @@ color: rgb(0, 120, 130);
 border-color: transparent;
 
 `
-
-
 const LastSlide = function({key}) {
   return (
     <CellBox key={key} >

@@ -59,6 +59,7 @@ const Price = styled.div`
      font-size: 20px;
 `
 
+
 var Listing = ({image, handleHeartClick, index}) => {
   function numberWithCommas(x, roundToNearest) {
     x = Math.round(x/roundToNearest)*roundToNearest
@@ -66,8 +67,15 @@ var Listing = ({image, handleHeartClick, index}) => {
   }
   function clickHandler(e, id) {
     var imageLocation= window.location.href.split('/');
-    imageLocation[imageLocation.length - 2] = (''+ id).padStart(2,'0');
-    location.assign(imageLocation.join('/'));
+    if(imageLocation.length === 4) {
+      console.log('imageLocation: ', imageLocation)
+      imageLocation[3] = ((''+id).padStart(2, '0'));
+      location.assign(imageLocation.join('/'));
+    } else {
+      console.log('imageLocation: ', imageLocation)
+      imageLocation[imageLocation.length - 2] = (''+ id).padStart(2,'0');
+      location.assign(imageLocation.join('/'));
+    }
   }
   return (
     <CellBox key={index}>

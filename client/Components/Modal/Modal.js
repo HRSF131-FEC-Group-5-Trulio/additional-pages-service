@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import styled, {css} from 'styled-components';
 import SearchBar from './SearchBar';
-import ModalItem from './ModalItem.js';
+import ModalItem from './ModalItem/ModalItem.js';
 
 const StyledModal = styled.div`
 &.modal {

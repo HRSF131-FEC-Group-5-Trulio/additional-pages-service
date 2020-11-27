@@ -13,6 +13,7 @@ app.use('/:id',express.static(path.join(__dirname,'../public')));
 app.use(bodyParser.json());
 
 app.get('/api/AdditionalListings/:id/property', (req, res) => {
+  // need to fetch req.params.id
   db.fetch((err, data) => {
     if(err) {
       console.log('error in getproperty: ', err);

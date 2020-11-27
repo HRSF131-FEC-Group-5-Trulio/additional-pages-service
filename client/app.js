@@ -2,108 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import styled, {css} from 'styled-components';
-import Modal from './Modal';
 import axios from 'axios';
-import Listing from './Listing';
-import LastSlide from './LastSlide';
-import SearchBar from './SearchBar';
-//probably will need to import fonts eventually.
+import Title from './Components/Title/Title';
+import Slider from './Components/Slider/Slider';
+import Modal from './Components/Modal/Modal';
+import SearchBar from './Components/Modal/SearchBar';
+
 
 const OuterContainer = styled.div`
-background: rgb(255, 255, 255);
-margin:    0 auto;
-        max-width: 1000px;
-        line-height: 1.5;
-        display: block;
-        font-size: 16px;
-        letter-spacing: -0.1px;
-        font-family: TruliaSans, system, -apple-system, Roboto, "Segoe UI Bold", Arial, sans-serif;
-        & i{
-          color: gray;
-        }
-`
-const FlexContainer = styled.div`
-&{
-   display: flex;
-    overflow-x: auto;
-    right: 100px;
-    margin-left: -8px;
-    margin-right: -8px;
-    border: solid;
-    border-color: transparent;
- }
- &::-webkit-scrollbar {
-    display: none;
+  background: rgb(255, 255, 255);
+  margin: 0 auto;
+  max-width: 1000px;
+  line-height: 1.5;
+  display: block;
+  font-size: 16px;
+  letter-spacing: -0.1px;
+  font-family: TruliaSans, system, -apple-system, Roboto, "Segoe UI Bold", Arial, sans-serif;
+  & i{
+    color: gray;
   }
-`;
-const ContentSlider = styled.div`
-position: relative;
-box-sizing: border-box;
-display: block;
-outline: none;
-margin-left: -8px;
- margin-right: -8px;
-&::-webkit-scrollbar {
-  display: none;
-}
-`
-
-const FavoritesLink = styled.button`
-  right: 0;
-  bottom: 0;
-  display: inline-block;
-  font-size: 15px;
-  position: absolute;
-
-  color: rgb(0, 120, 130);
-  background-color: white;
-  border-radius: 8px;
-  border: solid;
-  border-color: rgb(0, 120, 130);
-  font-weight: bold;
-  &:hover {
-    transform: scale(1.0);
-    background-color: rgb(0, 120, 130);
-    color: white;
-    border-color: transparent;
-  }
-
-`
-const TitleContainer = styled.div`
-  display:flex;
-  position: relative;
-  width: 100%;
-`
-
-const NextAndPrevious = css`
-  border: 1px solid rgb(232, 233, 234);
-  position: absolute;
-   width: 30px;
-   height: 30px;
-  background: #fff;
-  color: black;
-  top: 135px;
-  border-radius: 50%;
-  text-align: center;
-  cursor: pointer;
-  outline: none;
-  line-height: 30px;
-  text-align: center;
-
-  &:hover {
-    transform: scale(1.01);
-    box-shadow: -1px 8px 21px -11px rgba(0,0,0,0.58);
-  }
-
-`
-const PreviousButton = styled.i`
-  ${NextAndPrevious}
-  left: 0px;
-`
-
-const NextButton = styled.i`
-  ${NextAndPrevious}
-  right: 0px;
 `
 
 class App extends React.Component {
@@ -121,6 +38,9 @@ class App extends React.Component {
     };
     this.arrowButtonHandler = this.arrowButtonHandler.bind(this);
     this.onChangeHandler = this.onChangeHandler.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.handleScroll= this.handleScroll.bind(this);
+    this.handleHeartClick = this.handleHeartClick.bind(this);
 
   }
 
@@ -196,7 +116,7 @@ class App extends React.Component {
         console.log(properties);
         this.setState({properties, showSlides: properties});
         axios.post(`/api/additionalListings/resetFavorites`).then(response => {
-          // console.log('favorites reset!', 'also, left arrow: ', this.state.displayLeftArrow);
+           console.log('favorites reset!');
         })
       })
       .catch(function (error) {
@@ -216,20 +136,8 @@ class App extends React.Component {
       } = this.state;
         return (
           <OuterContainer>
-            <TitleContainer>
-            <h2 >Similar Homes You May Like</h2>
-              <FavoritesLink onClick={e => {this.showModal();}}>View your favorites list!</FavoritesLink>
-            </TitleContainer>
-            <ContentSlider onScroll={this.handleScroll.bind(this)}>
-              <FlexContainer>
-              {showSlides.length > 0 ? showSlides.map((image, index) => (
-                <Listing image={image} handleHeartClick= {this.handleHeartClick.bind(this)} index={index}/>
-              )) : <div>{''}</div>}
-              {<LastSlide key={properties.length}/>}
-                <PreviousButton className="fas fa-angle-left" onClick={(e) => this.arrowButtonHandler.call(this, e, -1 )} style={{visibility: displayLeftArrow ? 'visible':'hidden'}}></PreviousButton>
-                <NextButton className="fas fa-angle-right" onClick={(e) => this.arrowButtonHandler.call(this, e, 1 )} style={{visibility: displayRightArrow ? 'visible':'hidden'}}></NextButton>
-              </FlexContainer>
-            </ContentSlider>
+            <Title showModal={this.showModal}/>
+            <Slider handleScroll={this.handleScroll} showSlides={showSlides} handleHeartClick={this.handleHeartClick} arrowButtonHandler={this.arrowButtonHandler} displayLeftArrow={displayLeftArrow} displayRightArrow={displayRightArrow} properties={properties}/>
             <Modal show={show} handleClose={this.hideModal.bind(this)} favorites={displayedFavorites}>
               {<SearchBar favoriteList={favoriteList} onChangeHandler={(e) =>this.onChangeHandler(e)}/>}
             </Modal>
