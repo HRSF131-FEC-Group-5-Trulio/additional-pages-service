@@ -82,9 +82,9 @@ color: rgb(0, 120, 130);
 border-color: transparent;
 
 `
-const LastSlide = function({key}) {
+const LastSlide = function({propertiesLength}) {
   return (
-    <CellBox key={key} >
+    <CellBox key={propertiesLength} >
       <ImageDiv >
         <Neighborhood>
         <Flag className="far fa-flag"></Flag>

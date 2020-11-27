@@ -59,14 +59,14 @@ const NextButton = styled.i`
   right: 0px;
 `
 
-var Slider = ({handleScroll, showSlides, handleHeartClick, arrowButtonHandler,displayLeftArrow, displayRightArrow, properties}) => {
+const Slider = ({handleScroll, showSlides, handleHeartClick, arrowButtonHandler,displayLeftArrow, displayRightArrow, properties}) => {
   return (
     <ContentSlider onScroll={handleScroll}>
       <FlexContainer>
       {showSlides.length > 0 ? showSlides.map((image, index) => (
         <Listing image={image} handleHeartClick= {handleHeartClick} index={index}/>
       )) : <div>{''}</div>}
-      {<LastSlide key={properties.length}/>}
+      {<LastSlide propertiesLength={properties.length}/>}
         <PreviousButton className="fas fa-angle-left" onClick={(e) => arrowButtonHandler( e, -1 )} style={{visibility: displayLeftArrow ? 'visible':'hidden'}}></PreviousButton>
         <NextButton className="fas fa-angle-right" onClick={(e) => arrowButtonHandler(e, 1 )} style={{visibility: displayRightArrow ? 'visible':'hidden'}}></NextButton>
       </FlexContainer>
