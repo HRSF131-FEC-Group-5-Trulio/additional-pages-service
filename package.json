@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",
+    "compression-webpack-plugin": "^6.1.1",
     "css-loader": "^5.0.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
