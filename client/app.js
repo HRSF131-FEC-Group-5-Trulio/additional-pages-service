@@ -79,7 +79,7 @@ class App extends React.Component {
   handleScroll(e) {
     const scrollPosition = e.target.scrollLeft;
     const maxScrollLeft = e.target.scrollWidth - e.target.parentElement.clientWidth;
-    if(scrollPosition === 0) {
+    if(scrollPosition < 10 ) {
       this.setState({displayLeftArrow: false});
     } else if(scrollPosition ===maxScrollLeft-10) {
       this.setState({displayRightArrow: false, reachedMax: true});

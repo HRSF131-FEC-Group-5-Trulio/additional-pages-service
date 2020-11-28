@@ -21,9 +21,10 @@ const StyledModal = styled.div`
     left:50%;
     transform: translate(-50%,-50%);
     border-radius: 20px;
-    border: solid;
-    border-color: green;
-    background: rgb(204, 255, 204);
+    border: solid rgb(0, 120, 130);
+    //border-color: green;
+    background:rgb(224, 247, 248);
+    //background: rgb(204, 255, 204);
   }
   &.display-block {
     display: flex;
@@ -74,7 +75,7 @@ const CloseButton = styled.a`
 const FavoritesContainer = styled.div`
   text-align: left;
   top:50%;
-   border: solid green;
+   border: solid rgb(0, 120, 130);
    border-radius: 8px;
    height: 85%;
    width: 70%;

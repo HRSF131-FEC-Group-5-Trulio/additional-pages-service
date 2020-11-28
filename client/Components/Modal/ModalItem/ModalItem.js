@@ -4,13 +4,13 @@ import styled, {css} from 'styled-components';
 
 const FavoriteContainer = styled.div`
   position: relative;
-  border: solid green;
+  border: solid rgb(0, 173, 187);
   border-radius: 6px;
   display: flex;
   align-items: center;
-  background: rgb(204, 255, 204);
+  background: rgb(224, 247, 248);
   min-height: 70px;
-  //height: 100%
+  height: 100%
   overflow-y: auto;
   &::-webkit-scrollbar {
     display: none;
@@ -22,12 +22,12 @@ const FavoriteContainer = styled.div`
 
 `
 const FavoriteImage = styled.img`
-  height: 75px;
-  width: 75px;
+  height: 65px;
+  width: 65px;
   float: left;
   line-height: 50px;
   border-radius: 10px;
-  //border: solid green;
+  margin-left: 5px;
   position: absolute;
 `
 const AddressAndPriceContainer = styled.div`

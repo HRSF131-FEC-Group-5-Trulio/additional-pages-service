@@ -5,7 +5,7 @@ const createRecord = (id) => {
   let dataObj = {
     id: id,
     relatedProperties: generateRelatedProperties(id),
-    price: 1000000 + Math.floor(Math.random() * 5000000),
+    price: 500000 + Math.floor(Math.random() * 1000000),
     streetAddress: faker.address.streetAddress(),
     city: faker.address.city(),
     state: 'California',
