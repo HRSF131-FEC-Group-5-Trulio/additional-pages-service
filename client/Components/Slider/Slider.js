@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import styled, {css} from 'styled-components';
-import Listing from './Slides/Listing/Listing';
+import ListingSlides from './ListingSlides/ListingSlides';
 import LastSlide from './Slides/LastSlide';
- import NextArrowButton from './Buttons/NextArrowButton';
-import PreviousArrowButton from "./Buttons/PreviousArrowButton";
+ import NextArrowButton from './ArrowButtons/NextArrowButton';
+import PreviousArrowButton from "./ArrowButtons/PreviousArrowButton";
 //change Buttons
 
 const FlexContainer = styled.div`
@@ -38,10 +38,8 @@ const Slider = ({handleScroll, showSlides, handleHeartClick, arrowButtonHandler,
   return (
     <ContentSlider onScroll={handleScroll}>
       <FlexContainer>
-      {showSlides.length > 0 ? showSlides.map((image, index) => (
-        <Listing image={image} handleHeartClick= {handleHeartClick} index={index}/>
-      )) : <div>{''}</div>}
-      {<LastSlide propertiesLength={properties.length}/>}
+        <ListingSlides handleHeartClick={handleHeartClick} showSlides={showSlides}/>
+        {<LastSlide propertiesLength={properties.length}/>}
         <PreviousArrowButton arrowButtonHandler={arrowButtonHandler} displayLeftArrow={displayLeftArrow} />
         <NextArrowButton arrowButtonHandler={arrowButtonHandler} displayRightArrow={displayRightArrow} />
       </FlexContainer>

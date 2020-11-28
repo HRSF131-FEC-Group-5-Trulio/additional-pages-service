@@ -59,8 +59,6 @@ var ImageContainer = ({image, handleHeartClick}) => {
       <ImageDiv>
         <Image src={image.imageURL} onClick={(e) => clickHandler(e,image.id)}/><HeartIcon id={image.id} onClick={(e) => handleHeartClick(e)} className="fas fa-heart"></HeartIcon>
       </ImageDiv>
-
-
   )
 }
 

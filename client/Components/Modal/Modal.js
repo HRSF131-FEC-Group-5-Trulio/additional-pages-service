@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import styled, {css} from 'styled-components';
 import SearchBar from './SearchBar';
-import ModalItem from './ModalItem/ModalItem.js';
+import ModalItems from './ModalItems/ModalItems.js';
 
 const StyledModal = styled.div`
 &.modal {
@@ -40,7 +40,7 @@ const StyledModal = styled.div`
 const sharedStyle = css`
 position: absolute;
 content: '';
-height: 33px;
+height: 25px;
 width: 2px;
 background-color: #333;
 float: left;
@@ -53,8 +53,8 @@ const CloseButton = styled.a`
   float: left;
   width: 5%;
   height: 5%;
-  padding-top: 5px;
-  padding-left: 20px;
+  padding-top: 10px;
+  padding-left: 5px;
 }
 &.close:hover {
   opacity: 1;
@@ -72,19 +72,6 @@ const CloseButton = styled.a`
   transform: rotate(-45deg);
 }
 `
-const FavoritesContainer = styled.div`
-  text-align: left;
-  top:50%;
-   border: solid rgb(0, 120, 130);
-   border-radius: 8px;
-   height: 85%;
-   width: 70%;
-   margin-top: 20px;
-   margin-left: auto;
-   margin-right: auto;
-   background: white;
-   overflow-y: auto;
-`
 
 //Add a shadow??
 class Modal extends React.Component {
@@ -92,32 +79,28 @@ class Modal extends React.Component {
     super(props);
 
   }
-  numberWithCommas(x, roundToNearest) {
-    x = Math.round(x/roundToNearest)*roundToNearest
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-  getHighlightedText(text, highlight) {
-    // Split text on highlight term, include term itself into parts, ignore case
-    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-    return <span>{parts.map(part => part.toLowerCase() === highlight.toLowerCase() ? <b>{part}</b> : part)}</span>;
-}
+//   getHighlightedText(text, highlight) {
+//     // Split text on highlight term, include term itself into parts, ignore case
+//     const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+//     return <span>{parts.map(part => part.toLowerCase() === highlight.toLowerCase() ? <b>{part}</b> : part)}</span>;
+// }
   stopPropagation(e) {
     e.stopPropagation();
   }
 
   render(){
     const showHideClassName = this.props.show ? 'modal display-block' : 'modal display-none';
+    const {
+      handleClose,
+      favorites,
+      children,
+    } = this.props;
     return (
-      <StyledModal className={showHideClassName} onClick={this.props.handleClose}>
+      <StyledModal className={showHideClassName} onClick={handleClose}>
         <section className='modal-main'  onClick={this.stopPropagation}>
-        <CloseButton href="#" className="close" onClick={this.props.handleClose}/>
-          {this.props.children}
-          <FavoritesContainer>
-            {this.props.favorites.length === 0? 'No items selected.' : this.props.favorites.map(favorite=> {return (
-              <ModalItem favorite={favorite} numberWithCommas={this.numberWithCommas.bind()} />
-            )}
-            )}
-          </FavoritesContainer>
+        <CloseButton href="#" className="close" onClick={handleClose}/>
+          {children}
+          <ModalItems favorites={favorites} />
         </section>
       </StyledModal>
     );
