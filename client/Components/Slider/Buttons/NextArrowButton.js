@@ -24,10 +24,6 @@ const NextAndPrevious = css`
   }
 
 `
-const PreviousButton = styled.i`
-  ${NextAndPrevious}
-  left: 0px;
-`
 
 const NextButton = styled.i`
   ${NextAndPrevious}

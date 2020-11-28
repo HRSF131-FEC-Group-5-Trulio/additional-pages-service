@@ -29,14 +29,10 @@ const PreviousButton = styled.i`
   left: 0px;
 `
 
-const NextButton = styled.i`
-  ${NextAndPrevious}
-  right: 0px;
-`
 
 const PreviousArrowButton= ({arrowButtonHandler,displayLeftArrow}) => {
   return (
-        <PreviousButton className="fas fa-angle-left" onClick={(e) => {arrowButtonHandler( e, -1 ); console.log('in arrowbuttonhandler')}} style={{visibility: displayLeftArrow ? 'visible':'hidden'}}></PreviousButton>
+        <PreviousButton className="fas fa-angle-left" onClick={(e) => arrowButtonHandler( e, -1 ) } style={{visibility: displayLeftArrow ? 'visible':'hidden'}}></PreviousButton>
   )
 }
 

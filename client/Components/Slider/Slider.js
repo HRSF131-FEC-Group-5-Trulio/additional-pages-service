@@ -2,8 +2,11 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import styled, {css} from 'styled-components';
 import Listing from './Slides/Listing/Listing';
-import LastSlide from './Slides/LastSlide/LastSlide';
-import Buttons from './Buttons/Buttons';
+import LastSlide from './Slides/LastSlide';
+ import NextArrowButton from './Buttons/NextArrowButton';
+import PreviousArrowButton from "./Buttons/PreviousArrowButton";
+//change Buttons
+
 const FlexContainer = styled.div`
 &{
    display: flex;
@@ -29,36 +32,6 @@ margin-left: -8px;
 &::-webkit-scrollbar {
   display: none;
 }
-`
-const NextAndPrevious = css`
-  border: 1px solid rgb(232, 233, 234);
-  position: absolute;
-   width: 30px;
-   height: 30px;
-  background: #fff;
-  color: black;
-  top: 135px;
-  border-radius: 50%;
-  text-align: center;
-  cursor: pointer;
-  outline: none;
-  line-height: 30px;
-  text-align: center;
-
-  &:hover {
-    transform: scale(1.01);
-    box-shadow: -1px 8px 21px -11px rgba(0,0,0,0.58);
-  }
-
-`
-const PreviousButton = styled.i`
-  ${NextAndPrevious}
-  left: 0px;
-`
-
-const NextButton = styled.i`
-  ${NextAndPrevious}
-  right: 0px;
 `
 
 const Slider = ({handleScroll, showSlides, handleHeartClick, arrowButtonHandler,displayLeftArrow, displayRightArrow, properties}) => {
