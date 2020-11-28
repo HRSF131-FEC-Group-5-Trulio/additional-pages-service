@@ -17,7 +17,8 @@ const OuterContainer = styled.div`
   display: block;
   font-size: 16px;
   letter-spacing: -0.1px;
-  font-family: TruliaSans, system, -apple-system, Roboto, "Segoe UI Bold", Arial, sans-serif;
+  //font-family: TruliaSans, system, -apple-system, Roboto, "Segoe UI Bold", Arial, sans-serif;
+  font-family: Helvetica;
   & i{
     color: gray;
   }

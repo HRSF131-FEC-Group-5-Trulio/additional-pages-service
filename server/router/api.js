@@ -4,7 +4,7 @@ const db = require('../../db/seed-database')
 const router = Router();
 
 router.get('/:id/property', (req, res) => {
-  db.fetch((err, data) => {
+  db.fetch(+req.params.id, (err, data) => {
     if(err) {
       console.log('error in getproperty: ', err);
       res.sendStatus(404);

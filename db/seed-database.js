@@ -40,8 +40,8 @@ var save = function(entries) {
     created++;
   }
 }
-var fetch = function(callback) {
-  Property.findOne({id: 1}, {id: 1, imageURL: 1, relatedProperties: 1}).exec(callback);
+var fetch = function(id, callback) {
+  Property.findOne({id}, {id: 1, imageURL: 1, relatedProperties: 1}).exec(callback);
 }
 var fetchById = function(relatedProperties, callback) {
   Property.find({id: relatedProperties}, callback);

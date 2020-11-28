@@ -18,8 +18,6 @@ const FavoriteContainer = styled.div`
   &:hover {
     border-color: red;
   }
-
-
 `
 const FavoriteImage = styled.img`
   height: 65px;
@@ -38,7 +36,6 @@ margin-left: 80px;
 //margin: 10px 5px;
 `
 const Price = styled.div`
-
 `
 const Address = styled.div`
  font-weight: bold;

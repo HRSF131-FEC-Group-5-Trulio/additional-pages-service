@@ -23,7 +23,7 @@ const createRecord = (id) => {
 const NUMBER_OF_RELATED_PROPERTIES = 15;
 
 const generateRelatedProperties = (id) => {
-  return new Array(NUMBER_OF_RELATED_PROPERTIES).fill(0).map((elem, index) => id + index + 1);
+  return new Array(NUMBER_OF_RELATED_PROPERTIES).fill(0).map((elem, index) => (id + index)%99 + 1);
 }
 
 module.exports = {createRecord};
