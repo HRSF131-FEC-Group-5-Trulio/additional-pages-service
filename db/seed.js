@@ -1,3 +1,3 @@
 const queryMethods = require('./seed-database.js');
-
-queryMethods.save(8);
+const SEED_DATA_NUMBER = 100;
+queryMethods.save(SEED_DATA_NUMBER);

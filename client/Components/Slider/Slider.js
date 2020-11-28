@@ -7,6 +7,7 @@ const FlexContainer = styled.div`
 &{
    display: flex;
     overflow-x: auto;
+    scroll-behavior: smooth;
     right: 100px;
     margin-left: -8px;
     margin-right: -8px;

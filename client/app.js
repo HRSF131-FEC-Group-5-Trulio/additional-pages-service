@@ -34,7 +34,8 @@ class App extends React.Component {
       showSlides:[],
       scrollPosition: 0,
       displayLeftArrow: false,
-      displayRightArrow: true
+      displayRightArrow: true,
+      reachedMax: false,
     };
     this.arrowButtonHandler = this.arrowButtonHandler.bind(this);
     this.onChangeHandler = this.onChangeHandler.bind(this);
@@ -72,17 +73,18 @@ class App extends React.Component {
     })
   }
   arrowButtonHandler(e, dir) {
-    e.target.parentElement.scrollLeft += (200 * dir);
+    const PIXELS_MOVED = this.state.reachedMax ?  765 : 896;
+    e.target.parentElement.scrollLeft += (PIXELS_MOVED * dir);
   }
   handleScroll(e) {
-    var scrollPosition = e.target.scrollLeft;
-    var maxScrollLeft = e.target.scrollWidth - e.target.parentElement.clientWidth;
+    const scrollPosition = e.target.scrollLeft;
+    const maxScrollLeft = e.target.scrollWidth - e.target.parentElement.clientWidth;
     if(scrollPosition === 0) {
       this.setState({displayLeftArrow: false});
     } else if(scrollPosition ===maxScrollLeft-10) {
-      this.setState({displayRightArrow: false});
+      this.setState({displayRightArrow: false, reachedMax: true});
     } else {
-      this.setState({displayLeftArrow: true, displayRightArrow: true});
+      this.setState({displayLeftArrow: true, displayRightArrow: true, reachedMax: false});
     }
   }
   getFavorites(callback) {
@@ -96,7 +98,6 @@ class App extends React.Component {
     console.log('in setKeyword: ',e.target.value)
   }
   onChangeHandler(e) {
-    //filter .includes
     var query = e.target.value.toLowerCase();
     var filtered = this.state.favoriteList.filter(favorite => {
       var address = `${favorite.streetAddress}, ${favorite.city}, ${favorite.state}, ${favorite.zipCode}`
@@ -108,7 +109,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    //pass in the props.id to the api call
     axios.get(`/api/AdditionalListings/${this.props.id}/property`)
       .then((response) => {
         console.log(response);
@@ -124,7 +124,6 @@ class App extends React.Component {
     })
   }
     render() {
-      //console.log('here is state: ',this.state)
       const {
         showSlides,
         properties,
