@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import styled, {css} from 'styled-components';
 import Listing from './Slides/Listing/Listing';
 import LastSlide from './Slides/LastSlide/LastSlide';
+import Buttons from './Buttons/Buttons';
 const FlexContainer = styled.div`
 &{
    display: flex;
@@ -68,8 +69,8 @@ const Slider = ({handleScroll, showSlides, handleHeartClick, arrowButtonHandler,
         <Listing image={image} handleHeartClick= {handleHeartClick} index={index}/>
       )) : <div>{''}</div>}
       {<LastSlide propertiesLength={properties.length}/>}
-        <PreviousButton className="fas fa-angle-left" onClick={(e) => arrowButtonHandler( e, -1 )} style={{visibility: displayLeftArrow ? 'visible':'hidden'}}></PreviousButton>
-        <NextButton className="fas fa-angle-right" onClick={(e) => arrowButtonHandler(e, 1 )} style={{visibility: displayRightArrow ? 'visible':'hidden'}}></NextButton>
+        <PreviousArrowButton arrowButtonHandler={arrowButtonHandler} displayLeftArrow={displayLeftArrow} />
+        <NextArrowButton arrowButtonHandler={arrowButtonHandler} displayRightArrow={displayRightArrow} />
       </FlexContainer>
     </ContentSlider>
   )

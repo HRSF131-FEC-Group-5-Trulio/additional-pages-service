@@ -74,8 +74,9 @@ class App extends React.Component {
     })
   }
   arrowButtonHandler(e, dir) {
+    console.log('are we in?')
     const PIXELS_MOVED = this.state.reachedMax ?  765 : 896;
-    e.target.parentElement.scrollLeft += (PIXELS_MOVED * dir);
+    e.target.parentElement.parentElement.scrollLeft += (PIXELS_MOVED * dir);
   }
   handleScroll(e) {
     const scrollPosition = e.target.scrollLeft;

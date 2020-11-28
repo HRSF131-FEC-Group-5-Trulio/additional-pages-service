@@ -45,7 +45,7 @@ var ModalItem = function({favorite, numberWithCommas}) {
     <FavoriteContainer className='x'>
       <FavoriteImage src={favorite.imageURL}></FavoriteImage>
         <AddressAndPriceContainer>
-          <Address key={favorite.id}>{`${favorite.streetAddress}, ${favorite.city}, ATL, ${favorite.zipCode}`}</Address>
+          <Address key={favorite.id}>{`${favorite.streetAddress}, ${favorite.city}, CA, ${favorite.zipCode}`}</Address>
           <Price>${numberWithCommas(favorite.price, 1000)}</Price>
         </AddressAndPriceContainer>
     </FavoriteContainer>
