@@ -8,7 +8,7 @@ display: inline block;
 left: 15%;
 //width: 100%;
 //text-align: center;
-margin-left: auto;
+margin-left: 15%;
    margin-right: auto;
 background:#F2F1F9;
  border:solid;

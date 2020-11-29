@@ -52,7 +52,7 @@ module.exports = {
         }
       ]
      },
-     mode: 'production',
+     mode: 'development',
     devServer: {
       contentBase: path.join(__dirname, 'public')
      }

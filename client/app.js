@@ -6,7 +6,8 @@ import axios from 'axios';
 import Title from './Components/Title/Title';
 import Slider from './Components/Slider/Slider';
 import Modal from './Components/Modal/Modal';
-import SearchBar from './Components/Modal/SearchBar';
+import SearchBar from './Components/Modal/ModalItems/SearchBar';
+import Dropdown from './Components/Modal/ModalItems/Dropdown';
 
 
 const OuterContainer = styled.div`
@@ -23,6 +24,29 @@ const OuterContainer = styled.div`
     color: gray;
   }
 `
+const ModalTitleContainer= styled.div`
+  display: flex;
+  align-items: center;
+
+`
+const SortButton = styled.button`
+  //color:red;
+  font-weight:bold;
+  background-color: white;
+  //padding-right: 10%;
+  margin-right: 5%;
+  border-radius: 8px;
+  border-color:rgb(0, 173, 187);
+  //line-height: px;
+  margin-top: 3%;
+  &:hover{
+    background-color:black;
+    color:white;
+    font-weight:bold;
+
+  }
+
+`
 
 class App extends React.Component {
   constructor(props) {
@@ -37,12 +61,15 @@ class App extends React.Component {
       displayLeftArrow: false,
       displayRightArrow: true,
       reachedMax: false,
+      sortByPriceOptions: ['Lowest to Highest', 'Highest to Lowest'],
+      leastToGreatest: false,
     };
     this.arrowButtonHandler = this.arrowButtonHandler.bind(this);
     this.onChangeHandler = this.onChangeHandler.bind(this);
     this.showModal = this.showModal.bind(this);
     this.handleScroll= this.handleScroll.bind(this);
     this.handleHeartClick = this.handleHeartClick.bind(this);
+    this.handleSortClick = this.handleSortClick.bind(this);
 
   }
 
@@ -56,6 +83,12 @@ class App extends React.Component {
     e.target.style.color = e.target.style.color !== 'red'? 'red': 'rgba(0,0,0,0.4)';
     let id = +e.target.id;
     this.toggleFavoriteStatus(id);
+  }
+  handleSortClick() {
+    // set the state of displayedFavorites to a sorted version either by increasing or decreasing.
+    const {displayedFavorites, leastToGreatest} = this.state;
+    this.setState({displayedFavorites: displayedFavorites.sort((a,b) =>
+      leastToGreatest ? b.price-a.price : a.price - b.price), leastToGreatest: !leastToGreatest})
   }
   toggleFavoriteStatus(id) {
     axios.post(`/api/AdditionalListings/${id}/favorites`)
@@ -132,14 +165,23 @@ class App extends React.Component {
         displayRightArrow,
         show,
         displayedFavorites,
-        favoriteList
+        favoriteList,
+        sortByPriceOptions,
+        leastToGreatest
       } = this.state;
         return (
           <OuterContainer>
             <Title showModal={this.showModal}/>
             <Slider handleScroll={this.handleScroll} showSlides={showSlides} handleHeartClick={this.handleHeartClick} arrowButtonHandler={this.arrowButtonHandler} displayLeftArrow={displayLeftArrow} displayRightArrow={displayRightArrow} properties={properties}/>
             <Modal show={show} handleClose={this.hideModal.bind(this)} favorites={displayedFavorites}>
-              {<SearchBar favoriteList={favoriteList} onChangeHandler={(e) =>this.onChangeHandler(e)}/>}
+              <ModalTitleContainer>
+              <SearchBar favoriteList={favoriteList} onChangeHandler={(e) =>this.onChangeHandler(e)}/>
+              <SortButton onClick={this.handleSortClick}>Sort By Price ({leastToGreatest ? '>': '<'})</SortButton>
+              {/* <Dropdown
+  title="Sort By Price"
+  list={sortByPriceOptions}
+/> */}
+</ModalTitleContainer>
             </Modal>
           </OuterContainer>
         )

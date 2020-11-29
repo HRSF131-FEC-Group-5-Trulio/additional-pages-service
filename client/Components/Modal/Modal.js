@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import styled, {css} from 'styled-components';
-import SearchBar from './SearchBar';
 import ModalItems from './ModalItems/ModalItems.js';
 
 const StyledModal = styled.div`

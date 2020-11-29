@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import styled, {css} from 'styled-components';
-import ListingSlides from './ListingSlides/ListingSlides';
+import ListingSlides from './Slides/ListingSlides/ListingSlides';
 import LastSlide from './Slides/LastSlide';
  import NextArrowButton from './ArrowButtons/NextArrowButton';
 import PreviousArrowButton from "./ArrowButtons/PreviousArrowButton";
