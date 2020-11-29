@@ -21,8 +21,20 @@ const FavoriteContainer = styled.div`
     border-color: red;
   }
 `
+function clickHandler(e, id) {
+  var imageLocation= window.location.href.split('/');
+  if(imageLocation.length === 4) {
+    console.log('imageLocation: ', imageLocation)
+    imageLocation[3] = ((''+id).padStart(2, '0'));
+    location.assign(imageLocation.join('/'));
+  } else {
+    console.log('imageLocation: ', imageLocation)
+    imageLocation[imageLocation.length - 2] = (''+ id).padStart(2,'0');
+    location.assign(imageLocation.join('/'));
+  }
+}
 var ModalItem = ({favorite}) => (
-    <FavoriteContainer className='x'>
+    <FavoriteContainer className='x' onClick={(e) => {clickHandler(e,favorite.id)}}>
       <ModalItemImage favorite={favorite}/>
       <ModalItemDescription favorite={favorite}/>
     </FavoriteContainer>

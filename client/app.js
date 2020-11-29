@@ -9,7 +9,7 @@ import Modal from './Components/Modal/Modal';
 import SearchBar from './Components/Modal/ModalItems/SearchBar';
 import Dropdown from './Components/Modal/ModalItems/Dropdown';
 
-
+// take some outer contianer stuff and move it onto proxy.
 const OuterContainer = styled.div`
   background: rgb(255, 255, 255);
   margin: 0 auto;
@@ -43,7 +43,6 @@ const SortButton = styled.button`
     background-color:black;
     color:white;
     font-weight:bold;
-
   }
 
 `
@@ -80,6 +79,7 @@ class App extends React.Component {
     this.setState({ show: false });
   }
   handleHeartClick(e) {
+    console.log('here is heart: ', e.target)
     e.target.style.color = e.target.style.color !== 'red'? 'red': 'rgba(0,0,0,0.4)';
     let id = +e.target.id;
     this.toggleFavoriteStatus(id);
@@ -107,8 +107,11 @@ class App extends React.Component {
     })
   }
   arrowButtonHandler(e, dir) {
-    const PIXELS_MOVED = this.state.reachedMax ?  765 : 896;
-    e.target.parentElement.scrollLeft += (PIXELS_MOVED * dir);
+    const scrollContainer = e.target.parentElement;
+    const CELL_WIDTH = 224;
+    const PIXELS_TO_MOVE = CELL_WIDTH * 3 + (dir === 1 ? 224- (scrollContainer.scrollLeft%224): scrollContainer.scrollLeft % 224)
+    const PIXELS_MOVED = this.state.reachedMax ?  765 : PIXELS_TO_MOVE;
+    scrollContainer.scrollLeft += (PIXELS_TO_MOVE * dir);
   }
   handleScroll(e) {
     const scrollPosition = e.target.scrollLeft;
