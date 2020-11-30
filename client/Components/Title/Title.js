@@ -9,11 +9,11 @@ const TitleContainer = styled.div`
   width: 100%;
 `
 
-const LastSlide = ({showModal}) => (
+const Title = ({showModal}) => (
     <TitleContainer>
       <h2 >Similar Homes You May Like</h2>
       <ShowFavorites showModal={showModal} />
     </TitleContainer>
   )
 
-export default LastSlide
+export default Title;

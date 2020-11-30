@@ -85,7 +85,6 @@ class App extends React.Component {
     this.toggleFavoriteStatus(id);
   }
   handleSortClick() {
-    // set the state of displayedFavorites to a sorted version either by increasing or decreasing.
     const {displayedFavorites, leastToGreatest} = this.state;
     this.setState({displayedFavorites: displayedFavorites.sort((a,b) =>
       leastToGreatest ? b.price-a.price : a.price - b.price), leastToGreatest: !leastToGreatest})
@@ -149,12 +148,9 @@ class App extends React.Component {
   componentDidMount() {
     axios.get(`/api/AdditionalListings/${this.props.id}/property`)
       .then((response) => {
-        console.log(response);
         var properties = JSON.parse(response.data);
-        console.log(properties);
         this.setState({properties, showSlides: properties});
         axios.post(`/api/additionalListings/resetFavorites`).then(response => {
-           console.log('favorites reset!');
         })
       })
       .catch(function (error) {

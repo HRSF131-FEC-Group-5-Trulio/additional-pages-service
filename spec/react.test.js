@@ -1,12 +1,13 @@
 import React from 'react'
 import {mount, shallow} from 'enzyme'
-
-
 import Adapter from 'enzyme-adapter-react-16';
 import App from '../client/app.js';
 import Modal from '../client/Components/Modal/Modal';
 import Slider from '../client/Components/Slider/Slider';
+import Title from '../client/Components/Title/Title';
 
+import TestRenderer from 'react-test-renderer';
+// import Link from '../Link.react';
 
 test('shallow renders App component', () => {
   const wrapper = shallow(<div><App /></div>);
@@ -25,69 +26,42 @@ test('shallow renders Slider component', () => {
 
 
 
-function Fixture() {
-  return (
-    <div>
-      <input id="checked" defaultChecked />
-      <input id="not" defaultChecked={false} />
-      <input id="tertiary" defaultChecked checked={false} />
-    </div>
-  );
-}
+test('App component contains Title component', () => {
+  const testRenderer = TestRenderer.create(<App />);
+const testInstance = testRenderer.root;
 
-describe('modal', () => {
-  it('assert checked', () => {
-    const wrapper = mount(<Fixture />);
-    expect(wrapper.find('#checked')).toBeChecked();
-    expect(wrapper.find('#not')).not.toBeChecked();;
-  });
-
+expect(typeof testInstance.findByType(Title).props.showModal).toBe('function');
+ //expect(testInstance.findByProps({show:false}).children).toHaveLength(2);
 });
-// test('CheckboxWithLabel changes the text after click', () => {
-//   // Render a checkbox with label in the document
-//   const checkbox = shallow(<CheckboxWithLabel labelOn="On" labelOff="Off" />);
-
-//   expect(checkbox.text()).toEqual('Off');
-
-//   checkbox.find('input').simulate('change');
-
-//   expect(checkbox.text()).toEqual('On');
+// describe('App debug mode', () => {
+//   it('should render correctly in "debug" mode', () => {
+//     const component = shallow(<App debug />);
+//     expect(component).toMatchSnapshot();
+//   });
 // });
-// test('renders children when passed in', () => {
-//   const style = { fontSize: 13 };
-//   const wrapper = shallow((
-//     <div>
-//       <span className="foo">Hello</span>
-//       <div style={style}>Goodbye</div>
-//       <span>Again</span>
-//     </div>
-//   ));
 
-//   expect(wrapper.containsAnyMatchingElements([
-//     <span>Bonjour</span>,
-//     <div>Goodbye</div>,
-//   ])).toBe(true);
-// });
-// test('contains a content slider', () => {
-//   const wrapper = mount(<div><App /></div>);
-//   expect(wrapper.contains(App)).toBe(true);
-// })
-// test('contains a content slider', () => {
-//   class Fixture extends React.Component {
-//     render() {
-//     return (
-//       <div>
-//         <input id="checked" defaultChecked />
-//         <input id="not" defaultChecked={false} />
-//         <input id="tertiary" defaultChecked checked={false} />
-//       </div>
-//     );
-//     }
-//   }
+// import renderer from 'react-test-renderer';
+// import Link from '../Link.react';
 
-//   const wrapper = mount(<Fixture />); // mount/render/shallow when applicable
-//   const checked = wrapper.find('#checked');
-//   console.log('-------------------wrapper: ', checked.length);
-//   expect(checked).toBeChecked();
-//   expect(wrapper.find('#not')).not.toBeChecked();
-// })
+test('Title Render matches snapshot', () => {
+  const showModal=() =>{
+    this.setState({ show: true });
+  }
+  const component = TestRenderer.create(
+    <Title showModal={showModal}/>,
+  );
+  let tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
+
+  // // manually trigger the callback
+  // tree.props.onMouseEnter();
+  // // re-rendering
+  // tree = component.toJSON();
+  // expect(tree).toMatchSnapshot();
+
+  // // manually trigger the callback
+  // tree.props.onMouseLeave();
+  // // re-rendering
+  // tree = component.toJSON();
+  // expect(tree).toMatchSnapshot();
+});
