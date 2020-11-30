@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App debug mode should render correctly in "debug" mode 1`] = `
+<app__OuterContainer>
+  <LastSlide
+    showModal={[Function]}
+  />
+  <Slider
+    arrowButtonHandler={[Function]}
+    displayLeftArrow={false}
+    displayRightArrow={true}
+    handleHeartClick={[Function]}
+    handleScroll={[Function]}
+    properties={Array []}
+    showSlides={Array []}
+  />
+  <Modal
+    favorites={Array []}
+    handleClose={[Function]}
+    show={false}
+  >
+    <app__ModalTitleContainer>
+      <SearchBar
+        favoriteList={Array []}
+        onChangeHandler={[Function]}
+      />
+      <app__SortButton
+        onClick={[Function]}
+      >
+        Sort By Price (
+        &lt;
+        )
+      </app__SortButton>
+    </app__ModalTitleContainer>
+  </Modal>
+</app__OuterContainer>
+`;
+
+exports[`Title Render matches snapshot 1`] = `
+<div
+  className="Title__TitleContainer-sc-1w9co3c-0 fspMKj"
+>
+  <h2>
+    Similar Homes You May Like
+  </h2>
+  <button
+    className="ShowFavorites__FavoritesLink-sc-1xsezjx-0 WpdnV"
+    onClick={[Function]}
+  >
+    View your favorites list!
+  </button>
+</div>
+`;
