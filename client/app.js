@@ -109,8 +109,9 @@ class App extends React.Component {
   arrowButtonHandler(e, dir) {
     const scrollContainer = e.target.parentElement;
     const CELL_WIDTH = 224;
-    const PIXELS_TO_MOVE = CELL_WIDTH * 3 + (dir === 1 ? 224- (scrollContainer.scrollLeft%224): scrollContainer.scrollLeft % 224)
-    const PIXELS_MOVED = this.state.reachedMax ?  765 : PIXELS_TO_MOVE;
+    const LEFT_SCROLL_PIXELS = scrollContainer.scrollLeft % 224 === 0? 224 : scrollContainer.scrollLeft % 224;
+    const RIGHT_SCROLL_PIXELS = 224- (scrollContainer.scrollLeft % 224);
+    const PIXELS_TO_MOVE = CELL_WIDTH * 3 + (dir === 1 ? RIGHT_SCROLL_PIXELS: LEFT_SCROLL_PIXELS);
     scrollContainer.scrollLeft += (PIXELS_TO_MOVE * dir);
   }
   handleScroll(e) {
@@ -178,13 +179,9 @@ class App extends React.Component {
             <Slider handleScroll={this.handleScroll} showSlides={showSlides} handleHeartClick={this.handleHeartClick} arrowButtonHandler={this.arrowButtonHandler} displayLeftArrow={displayLeftArrow} displayRightArrow={displayRightArrow} properties={properties}/>
             <Modal show={show} handleClose={this.hideModal.bind(this)} favorites={displayedFavorites}>
               <ModalTitleContainer>
-              <SearchBar favoriteList={favoriteList} onChangeHandler={(e) =>this.onChangeHandler(e)}/>
-              <SortButton onClick={this.handleSortClick}>Sort By Price ({leastToGreatest ? '>': '<'})</SortButton>
-              {/* <Dropdown
-  title="Sort By Price"
-  list={sortByPriceOptions}
-/> */}
-</ModalTitleContainer>
+                <SearchBar favoriteList={favoriteList} onChangeHandler={(e) =>this.onChangeHandler(e)}/>
+                <SortButton onClick={this.handleSortClick}>Sort By Price ({leastToGreatest ? '>': '<'})</SortButton>
+              </ModalTitleContainer>
             </Modal>
           </OuterContainer>
         )

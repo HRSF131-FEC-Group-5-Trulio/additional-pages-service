@@ -89,7 +89,7 @@ const LastSlide = function({propertiesLength}) {
         <Neighborhood>
         <Flag className="far fa-flag"></Flag>
           <NeightborhoodDescription>See more Homes for Sale in<br/>
-          <NeighborhoodName>California</NeighborhoodName>
+          <NeighborhoodName>San Francisco</NeighborhoodName>
           </NeightborhoodDescription>
           <TakeALookButton>Take a look</TakeALookButton>
         </Neighborhood>
