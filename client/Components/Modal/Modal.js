@@ -73,17 +73,12 @@ const CloseButton = styled.a`
 }
 `
 
-//Add a shadow??
 class Modal extends React.Component {
   constructor(props) {
     super(props);
 
   }
-//   getHighlightedText(text, highlight) {
-//     // Split text on highlight term, include term itself into parts, ignore case
-//     const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-//     return <span>{parts.map(part => part.toLowerCase() === highlight.toLowerCase() ? <b>{part}</b> : part)}</span>;
-// }
+
   stopPropagation(e) {
     e.stopPropagation();
   }
